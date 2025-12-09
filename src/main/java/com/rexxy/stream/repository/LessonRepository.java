@@ -1,11 +1,11 @@
 package com.rexxy.stream.repository;
 
 import com.rexxy.stream.model.Lesson;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface LessonRepository extends JpaRepository<Lesson,Integer> {
-    List<Lesson> findByLessonGroup_Id(Integer lessonGroupId);
+public interface LessonRepository extends MongoRepository<Lesson, String> {
+    List<Lesson> findByLessonGroup_Id(String lessonGroupId);
 }

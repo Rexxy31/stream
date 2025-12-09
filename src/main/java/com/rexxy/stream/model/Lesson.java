@@ -1,28 +1,27 @@
 package com.rexxy.stream.model;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@Table(name = "lessons")
+@Document(collection = "lessons")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Lesson {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private String id;
 
     private String title;
     private String duration;
 
-    @Column(name = "resource_path")
-    private String resourcePath;
+    private String resourcePath; // File path for LOCAL or Google Drive file ID for GOOGLE_DRIVE
+    private StorageType storageType; // LOCAL or GOOGLE_DRIVE
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lesson_group_id", nullable = false)
+    @DBRef
     private LessonGroup lessonGroup;
 
 }

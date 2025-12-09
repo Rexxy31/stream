@@ -1,25 +1,29 @@
 package com.rexxy.stream.model;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@Table(name="modules")
+import java.util.List;
+
+@Document(collection = "modules")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Module {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private String id;
 
-    @ManyToOne
-    @JoinColumn(name="course_id",  nullable=false)
+    @DBRef
     private Course course;
 
     private String title;
     private String duration;
+
+    @DBRef
+    private List<LessonGroup> lessonGroups;
 }

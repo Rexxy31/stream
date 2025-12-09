@@ -1,0 +1,244 @@
+File Name,File ID,MIME Type,Folder Path
+5- Asynchronous Programming.mp4,10cbJd5NPOj0Si4Q2rRqiCL_acijd9QCx,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/8. The Executive Framework (70m)
+4- Callables and Futures.mp4,1ozNpIwWseC8IVGgE7jMc5dVKSWKFcQ5I,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/8. The Executive Framework (70m)
+3- Executors.mp4,1o-MFnr0B92IghphG84KGGHuIev2ev2LV,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/8. The Executive Framework (70m)
+20- Solution- Random Delays.mp4,1Wthw8OWQPJzCfWZn2CexivpCDvPz0R8C,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/8. The Executive Framework (70m)
+2- Thread Pools.mp4,1kAO1wAIdGg0rOMDBWDAdy7Tk6Gs8mtod,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/8. The Executive Framework (70m)
+19- Solution- Getting Many Quotes.mp4,13dCXfs2Do0vqdQN8UzJ1wiflGEue5IID,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/8. The Executive Framework (70m)
+10- Handling Exceptions.mp4,1SmMZm9VIpszEZR3cLkWpA4JXZel4FeAP,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/8. The Executive Framework (70m)
+1- Introduction.mp4,1SvqJAy-6MkXctjxWhnCVnHXhJDPDRMU4,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/8. The Executive Framework (70m)
+13- Combining Completable Futures.mp4,1MbYbT0KtXZ0-9W_OW67UeJ4KgQLZk09C,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/8. The Executive Framework (70m)
+12- Composing Completable Futures.mp4,1J7EWqp8hq-WgElF8Dg8XwW7ovYYFCqAF,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/8. The Executive Framework (70m)
+8- Implementing an Asynchronous API.mp4,1Cj2bnkRjYhDycNWWeDcDTfT49APpb5lN,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/8. The Executive Framework (70m)
+11- Transforming a Completable Future.mp4,1qbkN-8bp3zuDUzMyUL3ZlW5q1VUvl3ht,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/8. The Executive Framework (70m)
+18- Solution- Getting a Quote.mp4,1AESkZvx3H3HNgcc6GcNvTCLo89sWwVR0,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/8. The Executive Framework (70m)
+17- Project- Best Price Finder.mp4,1MXmIx16RAoKR8TvRT5ODLZ7QyfudVqmD,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/8. The Executive Framework (70m)
+9- Running Code on Completion.mp4,1onr7XCXvdl5Xs2yQxBzUqHAjVHwWh6tB,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/8. The Executive Framework (70m)
+16- Handling timeouts.mp4,1peY5SPyebOYsvuDeHREZzK5KCPu4zEQ7,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/8. The Executive Framework (70m)
+15- Waiting for the First Task.mp4,1N86X2Fm-wcWjcpvWStM8cizffDVPfATP,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/8. The Executive Framework (70m)
+14- Waiting for Many Tasks to Complete.mp4,1ugRoUQeWg1kYBMgkw2XbZAvHEAal0RPZ,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/8. The Executive Framework (70m)
+7- Creating a Completable Future.mp4,1dLz2lAonDRB6LQUUpdCc_C2ynf_1D3KT,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/8. The Executive Framework (70m)
+6- Completable Futures.mp4,1AAHKHdkjTDlAffjRjbQ8MI8CKkMj0DdG,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/8. The Executive Framework (70m)
+18- Concurrent Collections.mp4,1yqpW3aLvJBTbtWWuNTwDawjb7gQIpwLA,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/7. Concurrency and Multi-threading (1h)
+17- Synchronized Collections.mp4,1wZdjHGvmTvacaGM2kd3VhKcPrODCt0i2,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/7. Concurrency and Multi-threading (1h)
+16- Adders.mp4,1Rmq8WdXg3EEva7afzg0yHecBKVYaccoj,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/7. Concurrency and Multi-threading (1h)
+15- Atomic Objects.mp4,1vW0VafWsOAf8BhKmY8ym-mYYVBiZYTJ3,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/7. Concurrency and Multi-threading (1h)
+14- Thread Signalling with wait() and notify().mp4,130xIiu_Zr_3Tv8clWlY6NHnj8LyhsAz9,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/7. Concurrency and Multi-threading (1h)
+13- The volatile Keyword.mp4,1_pHyxnJ9LfOLKRHDdEpM__8MoikfDlOa,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/7. Concurrency and Multi-threading (1h)
+7- Concurrency Issues.mp4,1GgxvskqSipAAzAPCkhjY4CVOzd0BKUk7,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/7. Concurrency and Multi-threading (1h)
+6- Interrupting a Thread.mp4,1R1ZzMF_A_cf2dloO_HsTFxcIlq2r2wau,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/7. Concurrency and Multi-threading (1h)
+5- Joining a Thread.mp4,1D7FLbPediju3PPvY18VKu9qOmY1unYjm,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/7. Concurrency and Multi-threading (1h)
+4- Pausing a Thread.mp4,1cNPiieYvWOBnCLCN0486dCm37ZSaxxOf,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/7. Concurrency and Multi-threading (1h)
+3- Starting a Thread.mp4,1lBE0NgGGQAI98b9NFc0PdygqUEPwcSaG,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/7. Concurrency and Multi-threading (1h)
+9- Strategies for Thread Safety.mp4,1qoVayur25A7FzeccXnWsXwwkO_lx9aHv,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/7. Concurrency and Multi-threading (1h)
+8- Race Conditions.mp4,1CI88z1IkK17vElup1KdCJm7yfESZjBB0,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/7. Concurrency and Multi-threading (1h)
+2- Processes and Threads.mp4,1927HdE2vBBVObEF4Heib0R4T9q3eEfzL,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/7. Concurrency and Multi-threading (1h)
+19- Summary.mp4,1c1TylxqbrB574sPWVGQqrZbKWFsgAc-s,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/7. Concurrency and Multi-threading (1h)
+12- The synchronized Keyword.mp4,19teofHxIi-ddkXzcFwb-A8TLp9__dY-W,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/7. Concurrency and Multi-threading (1h)
+11- Locks.mp4,1wM9eylOIN1Dd-pDP7379IoldYcUZRsQq,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/7. Concurrency and Multi-threading (1h)
+10- Confinement.mp4,1ek90r3rUQ_1SFLoOQS_mbQkOjSmALVZp,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/7. Concurrency and Multi-threading (1h)
+1- Introduction.mp4,1e90RVBZgFq7I0Xi80fDXr_o_f0aqB2Id,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/7. Concurrency and Multi-threading (1h)
+13- Grouping Elements.mp4,1tN5CcI404FEiYHKyYKAOsYkauPULymA3,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/6. Streams (1h)
+12- Collectors.mp4,1-dGjBao768ZAOt5ZxY3NinkH98CEIITJ,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/6. Streams (1h)
+11- Reducing a Stream.mp4,17RpYcZPZ1nTJzc1DIp_vfh1sAlS27Ht5,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/6. Streams (1h)
+3- Creating a Stream.mp4,1n388Kz8B1KvmoCTDDO5NKKh7DRm5Jnlx,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/6. Streams (1h)
+2- Imperative vs Functional Programming.mp4,1R-X2dORVPnsTIlrtmc_pKTqKggchDKoX,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/6. Streams (1h)
+16- Summary.mp4,1YCyFl-dN5lTOi9pcPQoDGdoTrRCXdOY_,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/6. Streams (1h)
+15- Primitive Type Streams.mp4,1XVN0uQ9ixOdB_NNohqo8OTznPhiUokMW,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/6. Streams (1h)
+14- Partitioning Elements.mp4,1ruCbOXqP171JIN29Bmj0VRjiHljUD2jp,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/6. Streams (1h)
+10- Simple Reducers (1).mp4,17aWK6QHLITdJzuQMKZGur2dyk3w4HkEc,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/6. Streams (1h)
+1- Introduction (1).mp4,1lIkYbHKZG1ZFjMt69h7jI3f23iZPuueI,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/6. Streams (1h)
+8- Getting Unique Elements.mp4,1I2ebntwicEOK09KiBUS0uZ-M6d8XS7ZL,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/6. Streams (1h)
+7- Sorting Streams.mp4,1O3S4nNDqgZcnIzBBr2zHIr4UXzeyxpvI,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/6. Streams (1h)
+6- Slicing Streams.mp4,1M_CBAf1aXnGlYtTA_ys4iL8CdZNPRxdA,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/6. Streams (1h)
+5- Filtering Elements.mp4,1uxYXuIIr1NufkCtyOvXdlRI7qtNd8kFk,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/6. Streams (1h)
+4- Mapping Elements.mp4,1PEAN_L5UYQSDRnZ5Bgu6IvcYyy2Ln8Mv,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/6. Streams (1h)
+9- Peeking Elements.mp4,1v_Rfc9ZHH3kbIgbFznZPGqqHnvfR70cT,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/6. Streams (1h)
+10- Simple Reducers.mp4,1_wUoOVQON8dpivtM5qjthQmF5GUsNsyB,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/6. Streams (1h)
+1- Introduction.mp4,1MrKcsqhSGMFfePo05GuqCjGV4je2TrwQ,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/6. Streams (1h)
+8- The Consumer Interface.mp4,1v7tA_qpzpHpDV16UAxktc6gS6AKjll9i,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/5. Lambda Expressions and Functional Interfaces (44m)
+7- Built-in Functional Interfaces.mp4,1FYDy4FtGut5HE21V3golVrkmlg5DORCa,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/5. Lambda Expressions and Functional Interfaces (44m)
+6- Method References.mp4,1MnWPT2iRBI7nL8U5yKkdc9D7KIBpusaf,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/5. Lambda Expressions and Functional Interfaces (44m)
+2- Functional Interfaces.mp4,12wGuLu239-8NKEdJHF2yl3laCXNEMXWj,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/5. Lambda Expressions and Functional Interfaces (44m)
+17- Summary.mp4,1jZT1KS1YhqUREw9y59FbOqimZHkbJHi1,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/5. Lambda Expressions and Functional Interfaces (44m)
+16- The UnaryOperator Interface.mp4,1ujREleFvaJHfSk-A7v94lKRYEumnbzvE,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/5. Lambda Expressions and Functional Interfaces (44m)
+15- The BinaryOperator Interface.mp4,1q2w7MhJdfl0fyCJxs3DDrzOfTjyuWME-,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/5. Lambda Expressions and Functional Interfaces (44m)
+14- Combining Predicates.mp4,1MNj5hMxmo_v9NP5ogBVtcW34vGWOAdka,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/5. Lambda Expressions and Functional Interfaces (44m)
+5- Variable Capture.mp4,1cUya9leYDpIBYu9tYXXlG85XlqNaYQrw,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/5. Lambda Expressions and Functional Interfaces (44m)
+4- Lambda Expressions.mp4,1ij6xY1uiei0-UbFp45BjrkvSJS9j7Pq2,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/5. Lambda Expressions and Functional Interfaces (44m)
+3- Anonymous Inner Classes.mp4,1tpvdJ8qZ2iZPjafl52XN7UD5TqMwFoOS,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/5. Lambda Expressions and Functional Interfaces (44m)
+13- The Predicate Interface.mp4,1FijUF64DTvRvwf3fk53jxW8UZwcsiLei,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/5. Lambda Expressions and Functional Interfaces (44m)
+12- Composing Functions.mp4,1lavCn9YhEo-os_9XvATxOtyogEYDCz7X,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/5. Lambda Expressions and Functional Interfaces (44m)
+11- The Function Interface.mp4,1PJ0dVJ-z-u_1pv3L_e6Q8dY-jEFGJHXK,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/5. Lambda Expressions and Functional Interfaces (44m)
+10- The Supplier Interface.mp4,1ebQ4DiFxUX8CqfygmT48-_Kqz0ipcrXY,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/5. Lambda Expressions and Functional Interfaces (44m)
+1- Introduction.mp4,1xhkxIwCjWIpWVsz2Z2TC-PugM4rB6LGs,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/5. Lambda Expressions and Functional Interfaces (44m)
+9- Chaining Consumer (1).mp4,1HZT0BJu2lm8Rd7HQhTGb4deIzmt85ZJA,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/5. Lambda Expressions and Functional Interfaces (44m)
+9- Chaining Consumer.mp4,1X5XKMm2Wh52gZ5OAuARBiCDtIM8Y5Qqq,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/5. Lambda Expressions and Functional Interfaces (44m)
+12- Hash Tables.mp4,1OXT_dWdMxe0lD5-PUv1vHDa-EcSW9qkf,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/4. Collections (1h)
+11- The Set Interface.mp4,1E3nPHckpap7KsHrDsJ5o0NYerHMUcK6k,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/4. Collections (1h)
+10- The Queue Interface.mp4,1VFFv6eGt1Q7oDy6IM-jmLDpB2gSWQ1HZ,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/4. Collections (1h)
+1- Introduction.mp4,132_i5CnW0pcWsLEGSAQDbDkCM2sjSGg1,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/4. Collections (1h)
+5- The Iterator Interface.mp4,1H3ZHafodDQqjUS-qRKsRf4BUsx4ZCaZm,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/4. Collections (1h)
+4- The Iterable Interface.mp4,1FIIV6iuZIxsltvn6Hc6Mb7-TNaht96nO,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/4. Collections (1h)
+2- Overview of Collections Framework.mp4,1EeU9Jbb_SKZkbfcu06Ff7n9_wrqIrtDP,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/4. Collections (1h)
+14- Summary.mp4,1mArb8qt0lCwtbYH-CFHdLJ3wPSYtGTsj,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/4. Collections (1h)
+13- The Map Interface.mp4,1Zzgbd2gLUGu9mdPK_u-TQS-3zFypPfI9,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/4. Collections (1h)
+6- The Collection Interface.mp4,1TK8GCCSgcQ2yFWT1KEkBk_vwrQvzTaSc,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/4. Collections (1h)
+3- The Need for Iterables.mp4,1XgReEiJO-FAemNMx5u0Z3GUcVMcUtHNq,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/4. Collections (1h)
+9- The Comparator Interface.mp4,17ruNqQWfSlDLojtxiMC7F3yG3JR5Tr7k,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/4. Collections (1h)
+8- The Comparable Interface.mp4,1X-2G5HTF1FpEyu0nmczzT4lATuCFnjrw,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/4. Collections (1h)
+7- The List Interface.mp4,1FykwJADvbk2XsRCsij65LknGW3BmJ29O,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/4. Collections (1h)
+3- A Poor Solution.mp4,1XvXdSzu1tPHFg0IYaJv6f3vv5-XtDkzd,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/3. Generics (43m)
+2- The Need for Generics.mp4,1_0akZGFyGwAKdMdu8yOE-vG8BrrArTkM,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/3. Generics (43m)
+13- Summary.mp4,14KrJlKHUlQNq6R34tW9uBz1el8j6RWNE,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/3. Generics (43m)
+12- Wildcards.mp4,1FtvXk6tbw38ETxHQ1kJRQ5Zs6eAnMaj7,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/3. Generics (43m)
+11- Generic Classes and Inheritance.mp4,16gcxcUkEcxuOvQy9_Wuprl6h-X1eiWej,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/3. Generics (43m)
+10- Multiple Type Parameters.mp4,1XFwjsmCe3NhJQLnjpkZuKgMEEE57K0Bq,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/3. Generics (43m)
+1- Introduction.mp4,165giC82XTbki0hIUxdCUzNfB5g2dkBye,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/3. Generics (43m)
+9- Generic Methods.mp4,1fSfBfdkXQO5w95bdNfSqckmWUpeOX6G8,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/3. Generics (43m)
+8- Comparable Interface.mp4,1oDzsfXcYSM8qLkmgQqtXtr5XlkKQZuwL,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/3. Generics (43m)
+6- Constraints.mp4,1suus9tLVGa0zTX8yeHU0Y1LJCmu4EMzq,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/3. Generics (43m)
+5- Generics and Primitive Types.mp4,1i2BQa20nH8OTyGRnTeB3oKIBe6mQ31R7,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/3. Generics (43m)
+4- Generic Classes.mp4,1oM4C-i0SJbTW8OPP_R8_otPnsaIoqZV4,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/3. Generics (43m)
+7- Type Erasure.mp4,1X4aF_OKTb4qDLI2Db5IRB_HUDVzMj1Cb,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/3. Generics (43m)
+9- Throwing Exceptions.mp4,1Z18HYFdtS_1YQsFIYZ4R3BaTM8YJIchQ,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/2. Exceptions (43m)
+2- What are Exceptions.mp4,11-Or0hv68GyCmGyT5MZQ3Lwhlb-mvHrC,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/2. Exceptions (43m)
+13- Summary.mp4,1wNrZPJTGtaoEXH9BxyVZLjH60ugDNvoi,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/2. Exceptions (43m)
+12- Chaining Exceptions.mp4,1B34LgR6sb9IFpc-ZMVv82WHSNkeIZlNq,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/2. Exceptions (43m)
+11- Custom Exceptions.mp4,16OfNOGG1ySeAYGCdXPbYP62WxNJIeYq0,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/2. Exceptions (43m)
+10- Re-throwing Exceptions.mp4,1eZdskIe76QTVM1Aq9n9bATKrSmx9DHNJ,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/2. Exceptions (43m)
+1- Introduction.mp4,1VVQ3eaUJSiC81HCPqTpFhaXyju1juYzC,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/2. Exceptions (43m)
+7- The finally Block.mp4,1IDr17zgY1hFj84kV2PI2aCRInllhA7HF,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/2. Exceptions (43m)
+6- Catching Multiple Types of Exceptions (1).mp4,1Jjur_6zO5SOvwGnlM3KE_MqRepAFd89f,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/2. Exceptions (43m)
+5- Catching Exceptions.mp4,1nDdi9brhZU7d4bSySio4rr6lSavTl8B4,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/2. Exceptions (43m)
+8- The try-with-resources Statement.mp4,18CNhN2AWL2Z78qPMmdXt6zuwm-dd9s--,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/2. Exceptions (43m)
+4- Exceptions Hierarchy.mp4,1RA7J6eDoxFcf85bpKzR2H0_vRU2S9NzU,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/2. Exceptions (43m)
+3- Types of Exceptions.mp4,1Dm1axPMfwAWAHCQXRpehRO-w75sJPOZO,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/2. Exceptions (43m)
+6- Catching Multiple Types of Exceptions.mp4,1QACqbfvxy62ZNmbYYyC4wBxsal8KdES-,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/2. Exceptions (43m)
+1- Introduction.mp4,1K_B9iQq7znYrDx4BRM00Z_tMxWZXQ5zB,video/mp4,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/1. Getting Started
+Ultimate Java- Part 3.zip,1_xexWYUtU8Ec6zUZJRSHjRYknrwBpB1u,application/zip,The Ultimate Java Mastery Series/Part 3 - Advanced Topics/1. Getting Started
+9- Interface Segregation Principle.mp4,1xGPMR4rc3f59qesgRLfqrdHudPevg1Rj,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/5. Interfaces
+16- When to Use Interfaces.mp4,1TAUcmLmEqATauo-l-7_jMJRntAomL8NN,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/5. Interfaces
+15- Interfaces and Abstract Classes.mp4,1GGLlR6vd14Cn6w48f6r5y6B75R9hQCrj,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/5. Interfaces
+14- Private Methods.mp4,1RI5berCjiYGWQFW5d0m6egcvbj9sKWrr,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/5. Interfaces
+2- What are Interfaces.mp4,1xebTFjlVx-XMKKg2fSo4MKjYU_tC_fv1,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/5. Interfaces
+4- Creating an Interface.mp4,10jRko1GvlWSdYK7-RgvLQdn0WVyfqysc,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/5. Interfaces
+11- Solution.mp4,142kcm4fMDvRyru_LtLLttomPKbCutI9e,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/5. Interfaces
+3- Tightly-coupled Code.mp4,10tHd5kI6n8EOA8Mzfp21Mj2jF-4PO2S-,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/5. Interfaces
+7- Setter Injection.mp4,1uhNtg-jW2L8EH_fIR0PshZxy6fpBWYVi,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/5. Interfaces
+8- Method Injection.mp4,1zSrsuUbcCFbW_VHA0vbVrBtq0UCpd2vK,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/5. Interfaces
+6- Constructor Injection.mp4,1ctwid_DFktzC-wYSDSeBsQEQ8wvXjIx2,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/5. Interfaces
+18- Course Wrap Up.mp4,1gedaYsMd5w8TwWyIlh6Pr9ptkHoTH_Fa,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/5. Interfaces
+17- Interfaces Quiz.pdf,1MTZ9CorJpuYcPVZxNwnsFIe-5bTnkMSV,application/pdf,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/5. Interfaces
+12- Fields.mp4,1iZmf7NHJN4ErrxB0L9X2p2PiTR_tTYxw,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/5. Interfaces
+5- Dependency Injection.mp4,1rQphps93cs05UJPwccQ5OXlbUhvcIXWy,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/5. Interfaces
+10- Project- MyTube Video Platform.mp4,127evmQTYZFm_w8JAa6KRh0jyvNf4X-OB,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/5. Interfaces
+1- Introduction.mp4,1ndljHHr-fStKrB2A3eWU49045s3eMZRt,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/5. Interfaces
+13- Static Methods.mp4,15U6wWKHIaq6UdiF2HTvYqGzqJ0AByZO0,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/5. Interfaces
+4- Constructors and Inheritance.mp4,1Hlq2iwVc1Mm_WV7_4D-4EEC80QXhM8d3,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/4. Inheritance
+9- Polymorphism.mp4,1CW65k0npklHARmBj2c-yIZAbiLDT6Vms,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/4. Inheritance
+7- Upcasting and Downcasting.mp4,1Vs-uzWyADAEJP5Djwm__k2wfH_qSWig9,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/4. Inheritance
+11- Final Classes and Methods.mp4,1_J2UHACzO7uDnsNlusrRHmFIlEOH_6N_,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/4. Inheritance
+5- Access Modifiers.mp4,13a-2YLaajrrApeSilBc8iqLie-6Yniva,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/4. Inheritance
+8- Comparing Objects.mp4,13LETZAgyWSLFDAxwnp_Gjw9PMxrKWyAp,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/4. Inheritance
+6- Overriding Methods.mp4,1ifYWSeLjpYf3eWqXOTPnXyzibUTOH-54,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/4. Inheritance
+15- Summary.mp4,1ZghyGTcwOAsQ4wYjwksIoLvLpgn8yQJM,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/4. Inheritance
+14- Inheritance Quiz.pdf,1I829DsuYrsMpIjztEVN7mBw1Kg42MXqn,application/pdf,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/4. Inheritance
+13- Multiple Inheritance.mp4,1-CJ7EFnwB12C1LTe5BuUBcoFstZZKGYF,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/4. Inheritance
+10- Abstract Classes and Methods.mp4,1z2VtNF-ND0Yjmnp6nJailfsJeVHh9C_j,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/4. Inheritance
+2- Inheritance.mp4,1HCb1PMY47sCPp77uE3r8PrJfEoxHQrok,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/4. Inheritance
+3- The Object Class.mp4,1oEYHRH3ZRb2X7Hm7dAVeMeXzBdRphR3c,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/4. Inheritance
+12- Deep Inheritance Hierarchies.mp4,1snV6O-rJ0LbLbdQwTTLKSxgTkSHPDdFN,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/4. Inheritance
+1- Introduction.mp4,1lZg62fVDNCOQbkTIulLt8KUj-6vLudKR,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/4. Inheritance
+1- Introduction.mp4,16L51Wgat_1iEPAuxIi6PdzlURSbPEBSc,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/3. Refactoring Towards an Object-oriented Design
+3- What Classes Do We Need_.mp4,1UJFIPRjIWFREeGmoWyeGBdgz2IiWAjRh,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/3. Refactoring Towards an Object-oriented Design
+9- Moving Static Fields.mp4,1V2cHKQ40LMudjRxLf5rzpeRG2ll1Xu8-,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/3. Refactoring Towards an Object-oriented Design
+8- Moving Away from Static Members.mp4,1qBW2MoAQMeIJYIpp3x-JbnnCTWeV_BvE,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/3. Refactoring Towards an Object-oriented Design
+10- Extracting Duplicate Logic.mp4,1xQMBxau_zmdmwGjOpqJ5B-B98mfGucpX,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/3. Refactoring Towards an Object-oriented Design
+7- Extracting the MortgageCalculator Class.mp4,1jEUuVKanKRbuycp5NMGyt4l0-WBtgdbL,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/3. Refactoring Towards an Object-oriented Design
+4- Extracting the Console Class.mp4,1r0mY5Q0E1TsvszFTSofAx9Pr7hRYdfZk,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/3. Refactoring Towards an Object-oriented Design
+11- Extracting getRemainingBalances - Title.mp4,1W39fZ8cCKJzZjzlvJMjAQdXGdj053c6s,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/3. Refactoring Towards an Object-oriented Design
+2- The Problem.mp4,1poAssfEq2le9ty9dF6zrX2VW7P5zXeuU,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/3. Refactoring Towards an Object-oriented Design
+5- Overloading Methods.mp4,1nMMq2UCP7yzFmIMaLajWG29USbMH6yEK,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/3. Refactoring Towards an Object-oriented Design
+6- Extracting the MortgageReport Class.mp4,1jNd6rarsp4Tu7Ao10sjTeM8EVgnb94f-,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/3. Refactoring Towards an Object-oriented Design
+12- One Last Touch.mp4,1H-9xLsoKR2MbSSa2NG-R32E-gO0qA6uO,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/3. Refactoring Towards an Object-oriented Design
+10- Coupling.mp4,1rYT627MsAIxzZ3f8bApwzRy7Ut2ozyaK,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/2. Classes
+8- Getters and Setters - Title.mp4,1cCyvh1GwD6F4dXdMQb8R-9gPFX4a-4b9,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/2. Classes
+4- Creating Objects.mp4,1yiyP9960QLb9VhVns-3O0dx08KZLcP8B,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/2. Classes
+7- Encapsulation.mp4,10ZEAosEPN2yP0dZpxPn-DQEaA9YhYPeC,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/2. Classes
+11- Reducing Coupling.mp4,1YQXxz1u7VKZDwPA4bxxZtwA1j9kBOus4,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/2. Classes
+6- Procedural Programming.mp4,1AktETP2yqBcJrafjksc0zmBrlNbcf36n,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/2. Classes
+5- Memory Allocation.mp4,11Sysq_q0SFoj3iYEl2wirVXqT9HBoxd8,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/2. Classes
+15- Static Members.mp4,1_3fTM4DjiVmOq2via--xQSHGuHqB6jus,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/2. Classes
+14- Constructor Overloading.mp4,1QBqsDdDM0iceqwgmSRK3LtOEeYGFj8c-,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/2. Classes
+12- Constructors.mp4,1mX82k6JkOt0pR5-oL3BVcxTunMQJxsPR,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/2. Classes
+17- Summary.mp4,1gT4Zw0NoOnzTHwi2mSzC8J9c2dhIYLOx,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/2. Classes
+16- Classes Quiz.pdf,1iohS0IHp_t9sUiM6Nji21atLa-Hss6M-,application/pdf,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/2. Classes
+9- Abstraction.mp4,1hOmFdNKR6oTzce9clLG4YhD6aNS0delK,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/2. Classes
+1- Introduction.mp4,1G28qqANMn78uIvPSfYStzFEp4Zr5H9HQ,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/2. Classes
+2- Classes and Objects.mp4,1k8nUx13YW83DhDnQyddvzwv6b8SSrkZx,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/2. Classes
+13- Method Overloading.mp4,145FSbAJOxd9HAbRuZxc584L6OCM02ZWq,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/2. Classes
+3- Creating Classes.mp4,1Sdm8JdlBhAh5w3RarLscG07Xu6iYSqAa,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/2. Classes
+2- Programming Paradigms.mp4,1OPp5-v2kYcu0lvaGkmdPrG2vZWklaarF,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/1. Getting Started
+1- Introduction.mp4,1NO8nH_14l_ECn-BdEk2OlgIY6hTDgcIz,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/1. Getting Started
+3- Benefits of Object-oriented Programming.mp4,1JSBXOEgTjW-RoQJxGH8zV41NqAEZkJj9,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/1. Getting Started
+5- Ultimate Java - Part 2.zip,1BnFJPpzHKkgI-EuatAfM-wSnGfnp14Iq,application/zip,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/1. Getting Started
+4- Course Structure.mp4,14HDd4r-OXikCBq2corm9W7x0YqXya-ig,video/mp4,The Ultimate Java Mastery Series/Part 2 - Object Oriented Programming/1. Getting Started
+4- Debugging Java Applications.mp4,18axW0rtZ5DWFrTFeNEFD6LYx8kz9Bbcb,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/5. Debugging and Deploying Applications
+5- Packaging Java Applications.mp4,1618GySOIyk8MfZkUUJ9WuHURQvzHQcqB,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/5. Debugging and Deploying Applications
+6- Course Wrap Up.mp4,1EQit42P6CeyaJC2ctVo5um4N6LYDbz7d,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/5. Debugging and Deploying Applications
+3- Common Syntax Errors.mp4,1opVHa3lQ3TyTiPAjNBCRo3mlsmgmtRng,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/5. Debugging and Deploying Applications
+2- Types of Errors.mp4,1WYnncoGQjNblui7jn8QWFbH8dltArkf6,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/5. Debugging and Deploying Applications
+1- Introduction.mp4,1mZq9QStpr7EpBooe_zIME2L83ZRS8uNe,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/5. Debugging and Deploying Applications
+6- Refactoring Repetitive Patterns.mp4,1z0C2H6GgyFOMIQxFCSXVRUBGxQzFNkMI,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/4. Clean Coding
+9- Refactoring the Code.mp4,1lQanGr41_JnH90582D9PCcpBw9TPmgcT,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/4. Clean Coding
+5- Extracting Methods.mp4,1gnptM3Skdx_vuRcKAQq2P6GtVVBJZS9x,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/4. Clean Coding
+2- Clean Coding.mp4,1XzFQ6Zv_frpTCC-h0CbXXuLWtZhKCMNc,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/4. Clean Coding
+8- Solution.mp4,1Z6xiihKhYyy9ArguDI3nlFzwbwpvpoTZ,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/4. Clean Coding
+7- Project- Payment Schedule.mp4,1ugsMAfnvRTlYVpWzpdAtF6AajYXLp73K,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/4. Clean Coding
+4- Refactoring.mp4,1AcoTE3d2nbC_MPnUynN0bYtRxlqtLww3,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/4. Clean Coding
+3- Creating Methods.mp4,1m5sSozGxh953D1KaOsinSBbgklhAvhXR,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/4. Clean Coding
+1- Introduction.mp4,1aJFDV1fHEGOaLmmO7x8N56paz5DFV8Md,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/4. Clean Coding
+10- Summary.mp4,1Hr4tFRlPGAsJe3spthzaqefFj029YbXL,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/4. Clean Coding
+16- Reading Input.mp4,1rfBid0xedZfkjIwDVmQI5Ttex7A1EL5w,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/2. Types
+3- Primitive Types.mp4,1EVO98iHvm6hASY82jJbFTjHLYsc-FDBU,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/2. Types
+15- Formatting Numbers.mp4,1MWPgEbFbOsArt5csvJugV945Jbr8QF_w,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/2. Types
+17- Project- Mortgage Calculator.mp4,1qBecRu-pq4x5Ed_hXav7wjAngfOF5R5z,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/2. Types
+18- Solution.mp4,1SOa26Q7eiSeDSXWIsVc4J6DzJayCDIsK,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/2. Types
+6- Strings.mp4,1v5okysRKLRFK1iXHXsrP2UWKzqpRFTos,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/2. Types
+8- Arrays.mp4,1R_pQ3XRgxtZEzIzJBX4JstWW2JBEE5oW,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/2. Types
+7- Escape Sequences.mp4,19lYNcRPhqTAa9UT-NotEIys_vAWvHNx7,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/2. Types
+9- Multi-dimensional Arrays.mp4,1q3FsYl5RJutA5165mV0zN0E0vBuFOEOb,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/2. Types
+14- The Math Class.mp4,1dDqfWgF-GiahosW9QsZNO2Hw-lnyGwD5,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/2. Types
+2- Variables.mp4,1-23kXmy1EIEZLmL9ug4y2gPxPRGqvLJo,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/2. Types
+5- Primitive vs Reference Types.mp4,12hbDY-LRp1pjV63jR03hKT_PAmSjG-QY,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/2. Types
+4- Reference Types.mp4,1klYlCNLq0Fo3eDpF3tFz17MUGaeazLWu,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/2. Types
+10- Constants.mp4,1JGVoHVO3lpCktJTqppgs_9lUF7IRms7t,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/2. Types
+11- Arithmetic Expressions.mp4,19D2Xvany2Q8NFS0J1g4C5zmXAv1H1-j7,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/2. Types
+19- Summary.mp4,1o9nRf496SxFr3zzZ49JgOmdzudSn7aFE,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/2. Types
+13- Casting.mp4,1Ckhkt-J-SsHl_IY_Mq4hbfW3bbP5bKb_,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/2. Types
+12- Order of Operations.mp4,1VQwDwZhwoomBr58UhthcN5gazLuItUqF,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/2. Types
+1- Introduction.mp4,10duwUXpPT5sK08UOlgsCxaowhOXPWhTF,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/2. Types
+10- While Loops.mp4,159bRR2iSblzXW97H55p5T047v9g5Ofsb,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/3. Control Flow
+8- Exercise- FizzBuzz.mp4,1cf5yeJi5XzUktPtEQT-W05Q9oqCaVf9A,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/3. Control Flow
+15- Solution.mp4,12Kvp8kPC5GRA4L-9mEFkKyCXw8jtZ2Ul,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/3. Control Flow
+3- Logical Operators.mp4,1LTW4yLyuwWw9AIpr0grbyTteAY6h_E9A,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/3. Control Flow
+4- If Statements.mp4,1I0rWpiZuPBuERYil04RPnU8Ik2Jww1Zo,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/3. Control Flow
+7- Switch Statements.mp4,1U_fpI3jKk4p08ZeHaAGErtYl8plaL79X,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/3. Control Flow
+9- For Loops.mp4,16VIuhlKRjWSrz_8WpA8vdUAwhPn5fuh1,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/3. Control Flow
+12- Break and Continue Statements.mp4,19HF7pSktur4NonPXmOEK6esekk96CXmm,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/3. Control Flow
+11- Do..While Loops.mp4,12_rlKr8ak3XOeQFiaXex6kWKBdLRQezD,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/3. Control Flow
+5- Simplifying If Statements.mp4,1ZAa3Gn3xy4uDUy0XJyR8-qlyy8HqeZjv,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/3. Control Flow
+6- The Ternary Operator.mp4,1bYYtGsoTCYvfADegpuXnrFH7gdec4B4j,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/3. Control Flow
+13- For-Each Loop.mp4,18ZVO97O7gEifzuRD4F-5nYi2tnG0qIRl,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/3. Control Flow
+2- Comparison Operators.mp4,18yZPg5DUAOgNB0BtNH5t-6DaYdAtvgcu,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/3. Control Flow
+16- Summary.mp4,1VV8AcjkEGZapO_FJdGV7unj6l-HZIiYb,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/3. Control Flow
+14- Project- Mortgage Calculator.mp4,1kPGOlCPR-_JDQDAwSS2fsiAg7u4w-5yL,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/3. Control Flow
+1- Introduction.mp4,10_5pc2bx0sZLEMllsu7e_wxTqoQSUJ7I,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/3. Control Flow
+1- Setting Up the Development Environment.mp4,1qoNis4uuYDHKHc4iONOwKsmywrzWHJoC,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/1. Getting Started
+3- Your First Java Program.mp4,1qOaK8za-tMI3jEzDraWWF8C2u38KlpS7,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/1. Getting Started
+6- Course Structure.mp4,1_1jKN4CbwzBpVcmGqTAFHaOoDoeKf_Mh,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/1. Getting Started
+4- How Java Code Gets Executed.mp4,1ULtRNXWu4I8AKbn0JDS3RqzI6GgCIGYa,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/1. Getting Started
+2- Anatomy of a Java Program.mp4,1o_uxcW5hOfGrFekl8z5nQLz0912_yPDT,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/1. Getting Started
+5- 5 Interesting Facts about Java.mp4,1HZiT07ZhYagl-YiXzZ5LYJWieehRfgOQ,video/mp4,The Ultimate Java Mastery Series/Part 1 - Fundamentals/1. Getting Started
+Ultimate Java - Part 1.zip,1gADivTuo0fnS_e59fXlqEmOpuJuzHJOf,application/zip,The Ultimate Java Mastery Series/Part 1 - Fundamentals/1. Getting Started

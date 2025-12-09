@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CourseDTO {
-    private int course_id;
-    private String course_title;
-    private String course_description;
-    private String course_category;
-    private String course_date;
+    private String id;
+    private String title;
+    private String description;
+    private String category;
+    private String createdAt;
 }

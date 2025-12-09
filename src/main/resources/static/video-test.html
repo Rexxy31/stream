@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Streaming Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        .upload-section, .video-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        video {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px 0;
+        }
+        .response {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Video Streaming Test Page</h1>
+        
+        <div class="upload-section">
+            <h2>Upload Video</h2>
+            <input type="file" id="videoFile" accept="video/*">
+            <button onclick="uploadVideo()">Upload</button>
+            <div id="uploadResponse" class="response" style="display:none;"></div>
+        </div>
+
+        <div class="video-section">
+            <h2>Stream Video</h2>
+            <p>Enter the filename from upload response:</p>
+            <input type="text" id="filename" placeholder="e.g., abc123.mp4" style="width: 300px; padding: 8px;">
+            <button onclick="loadVideo()">Load Video</button>
+            <br><br>
+            <video id="videoPlayer" controls style="display:none;">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080/api';
+
+        async function uploadVideo() {
+            const fileInput = document.getElementById('videoFile');
+            const file = fileInput.files[0];
+            
+            if (!file) {
+                alert('Please select a video file');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const response = await fetch(`${API_BASE}/videos/upload`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                const responseDiv = document.getElementById('uploadResponse');
+                responseDiv.style.display = 'block';
+                responseDiv.textContent = JSON.stringify(data, null, 2);
+                
+                // Auto-fill the filename
+                if (data.filename) {
+                    document.getElementById('filename').value = data.filename;
+                }
+            } catch (error) {
+                alert('Upload failed: ' + error.message);
+            }
+        }
+
+        function loadVideo() {
+            const filename = document.getElementById('filename').value;
+            
+            if (!filename) {
+                alert('Please enter a filename');
+                return;
+            }
+
+            const videoPlayer = document.getElementById('videoPlayer');
+            videoPlayer.src = `${API_BASE}/videos/stream/${filename}`;
+            videoPlayer.style.display = 'block';
+            videoPlayer.load();
+        }
+    </script>
+</body>
+</html>

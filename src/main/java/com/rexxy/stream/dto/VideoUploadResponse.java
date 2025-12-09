@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ModuleDTO {
-    private String id;
-    private String courseId;
-    private String title;
-    private String duration;
+public class VideoUploadResponse {
+    private String filename;
+    private String message;
+    private String url;
+    private long size;
 }
