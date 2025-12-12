@@ -6,6 +6,7 @@ import com.rexxy.stream.model.Course;
 import com.rexxy.stream.model.Module;
 import com.rexxy.stream.repository.CourseRepository;
 import com.rexxy.stream.repository.ModuleRepository;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -48,6 +49,7 @@ public class ModuleService {
                 .collect(Collectors.toList());
     }
 
+    @CacheEvict(value = "courseHierarchy", allEntries = true)
     public ModuleDTO createModule(ModuleDTO moduleDTO) {
         Course course = courseRepository.findById(moduleDTO.getCourseId())
                 .orElseThrow(() -> new ResourceNotFoundException("Course", "id", moduleDTO.getCourseId()));
@@ -62,6 +64,7 @@ public class ModuleService {
         return convertToDTO(savedModule);
     }
 
+    @CacheEvict(value = "courseHierarchy", allEntries = true)
     public ModuleDTO updateModule(String id, ModuleDTO moduleDTO) {
         Module module = moduleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Module", "id", id));
@@ -80,6 +83,7 @@ public class ModuleService {
         return convertToDTO(updatedModule);
     }
 
+    @CacheEvict(value = "courseHierarchy", allEntries = true)
     public void deleteModule(String id) {
         Module module = moduleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Module", "id", id));

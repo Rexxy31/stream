@@ -4,6 +4,7 @@ import com.rexxy.stream.dto.CourseDTO;
 import com.rexxy.stream.exception.ResourceNotFoundException;
 import com.rexxy.stream.model.Course;
 import com.rexxy.stream.repository.CourseRepository;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -31,6 +32,7 @@ public class CourseService {
         return convertToDTO(course);
     }
 
+    @CacheEvict(value = "courseHierarchy", allEntries = true)
     public CourseDTO createCourse(CourseDTO courseDTO) {
         Course course = new Course();
         course.setTitle(courseDTO.getTitle());
@@ -42,6 +44,7 @@ public class CourseService {
         return convertToDTO(savedCourse);
     }
 
+    @CacheEvict(value = "courseHierarchy", allEntries = true)
     public CourseDTO updateCourse(String id, CourseDTO courseDTO) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Course", "id", id));
@@ -54,6 +57,7 @@ public class CourseService {
         return convertToDTO(updatedCourse);
     }
 
+    @CacheEvict(value = "courseHierarchy", allEntries = true)
     public void deleteCourse(String id) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Course", "id", id));

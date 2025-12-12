@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { api } from '@/lib/api';
@@ -58,6 +58,7 @@ export default function CourseDetailPage() {
     const [enrolled, setEnrolled] = useState(false);
     const [enrolling, setEnrolling] = useState(false);
     const [expandedModules, setExpandedModules] = useState<Set<string>>(new Set());
+    const [expandedLessonGroups, setExpandedLessonGroups] = useState<Set<string>>(new Set());
     const [error, setError] = useState<string | null>(null);
 
     const [editModal, setEditModal] = useState<{
@@ -72,12 +73,44 @@ export default function CourseDetailPage() {
     const loadCourse = useCallback(async () => {
         try {
             const courseData = await api.getCourseHierarchy(courseId);
+
+            // Sorting Helper
+            const getSortIndex = (title: string): number => {
+                // Try "Part X"
+                const partMatch = title.match(/Part\s+(\d+)/i);
+                if (partMatch) return parseInt(partMatch[1], 10);
+
+                // Try "X- Title" or "X. Title"
+                const prefixMatch = title.match(/^(\d+)[-.]/);
+                if (prefixMatch) return parseInt(prefixMatch[1], 10);
+
+                return 999999; // Fallback for non-numbered items
+            };
+
+            const sortItems = <T extends { title: string }>(items: T[]): T[] => {
+                return [...items].sort((a, b) => {
+                    const idxA = getSortIndex(a.title);
+                    const idxB = getSortIndex(b.title);
+
+                    if (idxA !== idxB) return idxA - idxB;
+                    return a.title.localeCompare(b.title);
+                });
+            };
+
+            // Apply Sorting
+            courseData.modules = sortItems(courseData.modules);
+            courseData.modules.forEach(mod => {
+                mod.lessonGroups = sortItems(mod.lessonGroups);
+                mod.lessonGroups.forEach(group => {
+                    group.lessons = sortItems(group.lessons);
+                });
+            });
+
             setCourse(courseData);
 
-            // Expand first module by default
-            if (expandedModules.size === 0 && courseData.modules.length > 0) {
-                setExpandedModules(new Set([courseData.modules[0].id]));
-            }
+
+
+
 
             // Check enrollment
             if (user) {
@@ -98,11 +131,33 @@ export default function CourseDetailPage() {
         } finally {
             setLoading(false);
         }
-    }, [courseId, user, expandedModules]);
+    }, [courseId, user]);
+
+    const hasSetDefaultExpansion = useRef(false);
 
     useEffect(() => {
         loadCourse();
     }, [loadCourse]);
+
+    // Handle default expansion once
+    useEffect(() => {
+        if (course && course.modules.length > 0 && !hasSetDefaultExpansion.current) {
+            setExpandedModules(new Set([course.modules[0].id]));
+            hasSetDefaultExpansion.current = true;
+        }
+    }, [course]);
+
+    const toggleLessonGroup = (groupId: string) => {
+        setExpandedLessonGroups((prev) => {
+            const next = new Set(prev);
+            if (next.has(groupId)) {
+                next.delete(groupId);
+            } else {
+                next.add(groupId);
+            }
+            return next;
+        });
+    };
 
     const handleEnroll = async () => {
         if (!user) {
@@ -190,7 +245,7 @@ export default function CourseDetailPage() {
     }
 
     return (
-        <div className="min-h-screen py-24 px-4 bg-slate-950 relative overflow-hidden">
+        <div className="min-h-screen py-24 px-4 bg-slate-950 relative overflow-x-hidden">
             {/* Ambient Background */}
             <div className="fixed inset-0 pointer-events-none">
                 <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-[120px]" />
@@ -287,47 +342,53 @@ export default function CourseDetailPage() {
                             </div>
 
                             {/* Animated Content Expansion */}
-                            <div className={`transition-all duration-300 ease-in-out overflow-hidden ${expandedModules.has(module.id) ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                            <div className={`transition-all duration-300 ease-in-out ${expandedModules.has(module.id) ? 'max-h-[60vh] opacity-100 overflow-y-auto' : 'max-h-0 opacity-0 overflow-hidden'}`}>
                                 <div className="border-t border-slate-800 bg-black/20">
                                     {module.lessonGroups.map((group) => (
                                         <div key={group.id} className="border-b border-slate-800/50 last:border-b-0">
-                                            {group.title !== "Default Group" && (
-                                                <div className="px-6 py-3 bg-slate-900/50 border-b border-slate-800/30">
+                                            {group.title !== "Default Group" ? (
+                                                <button
+                                                    onClick={() => toggleLessonGroup(group.id)}
+                                                    className="w-full flex items-center justify-between px-6 py-3 bg-slate-900/50 border-b border-slate-800/30 hover:bg-slate-900/80 transition-colors"
+                                                >
                                                     <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">{group.title}</span>
-                                                </div>
-                                            )}
-                                            <div className="divide-y divide-slate-800/30">
-                                                {group.lessons.map((lesson) => (
-                                                    <div key={lesson.id} className="group/lesson flex items-center justify-between px-8 py-5 hover:bg-white/5 transition-colors">
-                                                        <Link
-                                                            href={enrolled ? `/watch/${lesson.id}` : '#'}
-                                                            className={`flex items-center gap-4 flex-1 transition-all ${enrolled
-                                                                ? 'cursor-pointer'
-                                                                : 'opacity-50 cursor-not-allowed grayscale'
-                                                                }`}
-                                                            onClick={(e) => !enrolled && e.preventDefault()}
-                                                        >
-                                                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center border ${enrolled ? 'bg-purple-500/10 border-purple-500/30 text-purple-400' : 'bg-slate-800 border-slate-700 text-slate-600'}`}>
-                                                                {enrolled ? (
-                                                                    <Play className="w-4 h-4" />
-                                                                ) : (
-                                                                    <Lock className="w-4 h-4" />
-                                                                )}
-                                                            </div>
-                                                            <span className="text-slate-300 font-medium group-hover/lesson:text-purple-300 transition-colors">{lesson.title}</span>
-                                                            <span className="text-sm text-slate-600">{lesson.duration ? lesson.duration : 'Video'}</span>
-                                                        </Link>
-
-                                                        {isAdmin && (
-                                                            <button
-                                                                onClick={() => setEditModal({ isOpen: true, type: 'lesson', id: lesson.id, initialData: { title: lesson.title, description: lesson.description } })}
-                                                                className="opacity-0 group-hover/lesson:opacity-100 p-2 text-slate-500 hover:text-white transition-all ml-4"
+                                                    <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform ${expandedLessonGroups.has(group.id) ? 'rotate-180' : ''}`} />
+                                                </button>
+                                            ) : null}
+                                            <div className={`overflow-hidden transition-all duration-300 ${group.title !== "Default Group" ? (expandedLessonGroups.has(group.id) ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0') : 'max-h-full opacity-100'}`}>
+                                                <div className="divide-y divide-slate-800/30">
+                                                    {group.lessons.map((lesson) => (
+                                                        <div key={lesson.id} className="group/lesson flex items-center justify-between px-8 py-5 hover:bg-white/5 transition-colors">
+                                                            <Link
+                                                                href={enrolled ? `/watch/${lesson.id}` : '#'}
+                                                                className={`flex items-center gap-4 flex-1 transition-all ${enrolled
+                                                                    ? 'cursor-pointer'
+                                                                    : 'opacity-50 cursor-not-allowed grayscale'
+                                                                    }`}
+                                                                onClick={(e) => !enrolled && e.preventDefault()}
                                                             >
-                                                                <Edit2 className="w-4 h-4" />
-                                                            </button>
-                                                        )}
-                                                    </div>
-                                                ))}
+                                                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center border ${enrolled ? 'bg-purple-500/10 border-purple-500/30 text-purple-400' : 'bg-slate-800 border-slate-700 text-slate-600'}`}>
+                                                                    {enrolled ? (
+                                                                        <Play className="w-4 h-4" />
+                                                                    ) : (
+                                                                        <Lock className="w-4 h-4" />
+                                                                    )}
+                                                                </div>
+                                                                <span className="text-slate-300 font-medium group-hover/lesson:text-purple-300 transition-colors">{lesson.title}</span>
+                                                                <span className="text-sm text-slate-600">{lesson.duration ? lesson.duration : 'Video'}</span>
+                                                            </Link>
+
+                                                            {isAdmin && (
+                                                                <button
+                                                                    onClick={() => setEditModal({ isOpen: true, type: 'lesson', id: lesson.id, initialData: { title: lesson.title, description: lesson.description } })}
+                                                                    className="opacity-0 group-hover/lesson:opacity-100 p-2 text-slate-500 hover:text-white transition-all ml-4"
+                                                                >
+                                                                    <Edit2 className="w-4 h-4" />
+                                                                </button>
+                                                            )}
+                                                        </div>
+                                                    ))}
+                                                </div>
                                             </div>
                                         </div>
                                     ))}

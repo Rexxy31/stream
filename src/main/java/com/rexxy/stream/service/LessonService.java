@@ -6,6 +6,7 @@ import com.rexxy.stream.model.Lesson;
 import com.rexxy.stream.model.LessonGroup;
 import com.rexxy.stream.repository.LessonGroupRepository;
 import com.rexxy.stream.repository.LessonRepository;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -48,6 +49,7 @@ public class LessonService {
                 .collect(Collectors.toList());
     }
 
+    @CacheEvict(value = "courseHierarchy", allEntries = true)
     public LessonDTO createLesson(LessonDTO lessonDTO) {
         LessonGroup lessonGroup = lessonGroupRepository.findById(lessonDTO.getLessonGroupId())
                 .orElseThrow(() -> new ResourceNotFoundException("LessonGroup", "id", lessonDTO.getLessonGroupId()));
@@ -63,6 +65,7 @@ public class LessonService {
         return convertToDTO(savedLesson);
     }
 
+    @CacheEvict(value = "courseHierarchy", allEntries = true)
     public LessonDTO updateLesson(String id, LessonDTO lessonDTO) {
         Lesson lesson = lessonRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Lesson", "id", id));
@@ -83,6 +86,7 @@ public class LessonService {
         return convertToDTO(updatedLesson);
     }
 
+    @CacheEvict(value = "courseHierarchy", allEntries = true)
     public void deleteLesson(String id) {
         Lesson lesson = lessonRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Lesson", "id", id));

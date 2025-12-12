@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 
 export interface SaveData {
@@ -23,6 +23,14 @@ export default function EditContentModal({ isOpen, onClose, onSave, type, initia
     const [description, setDescription] = useState(initialData.description || '');
     const [category, setCategory] = useState(initialData.category || '');
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (isOpen) {
+            setTitle(initialData.title);
+            setDescription(initialData.description || '');
+            setCategory(initialData.category || '');
+        }
+    }, [isOpen, initialData]);
 
     if (!isOpen) return null;
 

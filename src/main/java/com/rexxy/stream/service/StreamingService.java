@@ -14,8 +14,10 @@ import com.rexxy.stream.repository.ModuleRepository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,50 +62,63 @@ public class StreamingService {
                 dto.setCategory(course.getCategory());
                 dto.setCreatedAt(course.getCreateDate().toString());
 
-                // Query modules by courseId and sort by orderIndex
+                // Query modules by courseId
                 List<Module> modules = moduleRepository.findByCourse_Id(courseId);
+
+                // Batch fetch LessonGroups
+                List<LessonGroup> allGroups = lessonGroupRepository.findByModuleIn(modules);
+
+                // Group in memory
+                Map<String, List<LessonGroup>> groupsByModule = allGroups.stream()
+                                .collect(Collectors.groupingBy(g -> g.getModule().getId()));
+
+                // Assemble DTOs
                 List<CourseHierarchyDTO.ModuleHierarchyDTO> moduleDTOs = modules.stream()
                                 .sorted(Comparator.comparing(Module::getOrderIndex,
                                                 Comparator.nullsLast(Comparator.naturalOrder())))
-                                .map(this::convertModuleToHierarchy)
+                                .map(module -> {
+                                        CourseHierarchyDTO.ModuleHierarchyDTO moduleDTO = new CourseHierarchyDTO.ModuleHierarchyDTO();
+                                        moduleDTO.setId(module.getId());
+                                        moduleDTO.setTitle(module.getTitle());
+                                        moduleDTO.setDuration(module.getDuration());
+
+                                        List<LessonGroup> moduleGroups = groupsByModule.getOrDefault(module.getId(),
+                                                        List.of());
+                                        List<CourseHierarchyDTO.LessonGroupHierarchyDTO> groupDTOs = moduleGroups
+                                                        .stream()
+                                                        .sorted(Comparator.comparing(LessonGroup::getOrderIndex,
+                                                                        Comparator.nullsLast(
+                                                                                        Comparator.naturalOrder())))
+                                                        .map(group -> {
+                                                                CourseHierarchyDTO.LessonGroupHierarchyDTO groupDTO = new CourseHierarchyDTO.LessonGroupHierarchyDTO();
+                                                                groupDTO.setId(group.getId());
+                                                                groupDTO.setTitle(group.getTitle());
+
+                                                                List<Lesson> groupLessons = group.getLessons();
+                                                                if (groupLessons == null) {
+                                                                        groupLessons = Collections.emptyList();
+                                                                }
+
+                                                                List<CourseHierarchyDTO.LessonHierarchyDTO> lessonDTOs = groupLessons
+                                                                                .stream()
+                                                                                .sorted(Comparator.comparing(
+                                                                                                Lesson::getOrderIndex,
+                                                                                                Comparator.nullsLast(
+                                                                                                                Comparator.naturalOrder())))
+                                                                                .map(this::convertLessonToHierarchy)
+                                                                                .collect(Collectors.toList());
+
+                                                                groupDTO.setLessons(lessonDTOs);
+                                                                return groupDTO;
+                                                        })
+                                                        .collect(Collectors.toList());
+
+                                        moduleDTO.setLessonGroups(groupDTOs);
+                                        return moduleDTO;
+                                })
                                 .collect(Collectors.toList());
 
                 dto.setModules(moduleDTOs);
-                return dto;
-        }
-
-        private CourseHierarchyDTO.ModuleHierarchyDTO convertModuleToHierarchy(Module module) {
-                CourseHierarchyDTO.ModuleHierarchyDTO dto = new CourseHierarchyDTO.ModuleHierarchyDTO();
-                dto.setId(module.getId());
-                dto.setTitle(module.getTitle());
-                dto.setDuration(module.getDuration());
-
-                // Query lesson groups by moduleId and sort by orderIndex
-                List<LessonGroup> lessonGroups = lessonGroupRepository.findByModule_Id(module.getId());
-                List<CourseHierarchyDTO.LessonGroupHierarchyDTO> lessonGroupDTOs = lessonGroups.stream()
-                                .sorted(Comparator.comparing(LessonGroup::getOrderIndex,
-                                                Comparator.nullsLast(Comparator.naturalOrder())))
-                                .map(this::convertLessonGroupToHierarchy)
-                                .collect(Collectors.toList());
-
-                dto.setLessonGroups(lessonGroupDTOs);
-                return dto;
-        }
-
-        private CourseHierarchyDTO.LessonGroupHierarchyDTO convertLessonGroupToHierarchy(LessonGroup lessonGroup) {
-                CourseHierarchyDTO.LessonGroupHierarchyDTO dto = new CourseHierarchyDTO.LessonGroupHierarchyDTO();
-                dto.setId(lessonGroup.getId());
-                dto.setTitle(lessonGroup.getTitle());
-
-                // Query lessons by lessonGroupId and sort by orderIndex
-                List<Lesson> lessons = lessonRepository.findByLessonGroup_Id(lessonGroup.getId());
-                List<CourseHierarchyDTO.LessonHierarchyDTO> lessonDTOs = lessons.stream()
-                                .sorted(Comparator.comparing(Lesson::getOrderIndex,
-                                                Comparator.nullsLast(Comparator.naturalOrder())))
-                                .map(this::convertLessonToHierarchy)
-                                .collect(Collectors.toList());
-
-                dto.setLessons(lessonDTOs);
                 return dto;
         }
 
