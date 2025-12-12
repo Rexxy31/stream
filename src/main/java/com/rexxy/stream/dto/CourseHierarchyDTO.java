@@ -43,6 +43,7 @@ public class CourseHierarchyDTO {
         private String id;
         private String title;
         private String duration;
+        private String description;
         private String resourcePath;
     }
 }

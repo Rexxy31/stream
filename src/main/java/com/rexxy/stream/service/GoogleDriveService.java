@@ -150,6 +150,47 @@ public class GoogleDriveService {
     }
 
     /**
+     * Get file information from Google Drive
+     * 
+     * @param fileId Google Drive file ID
+     * @return Video file info or null if not found
+     */
+    public VideoFileInfo getFileInfo(String fileId) {
+        try {
+            Drive service = getDriveService();
+            File file = service.files().get(fileId)
+                    .setFields("id, name, mimeType, size")
+                    .execute();
+
+            VideoFileInfo info = new VideoFileInfo();
+            info.setFileId(file.getId());
+            info.setFileName(file.getName());
+            info.setMimeType(file.getMimeType());
+            info.setSize(file.getSize());
+            return info;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Stream a file from Google Drive
+     * 
+     * @param fileId Google Drive file ID
+     * @return InputStream for the file content
+     */
+    public java.io.InputStream streamFile(String fileId) {
+        try {
+            Drive service = getDriveService();
+            return service.files().get(fileId).executeMediaAsInputStream();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
      * Format duration from milliseconds to HH:MM:SS or MM:SS
      */
     private String formatDuration(long millis) {

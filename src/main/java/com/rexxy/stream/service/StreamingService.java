@@ -11,6 +11,7 @@ import com.rexxy.stream.repository.CourseRepository;
 import com.rexxy.stream.repository.LessonGroupRepository;
 import com.rexxy.stream.repository.LessonRepository;
 import com.rexxy.stream.repository.ModuleRepository;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -34,6 +35,7 @@ public class StreamingService {
                 this.lessonRepository = lessonRepository;
         }
 
+        @Cacheable(value = "courses")
         public List<CourseDTO> getAllCourses() {
                 return courseRepository.findAll()
                                 .stream()
@@ -46,6 +48,7 @@ public class StreamingService {
                                 .collect(Collectors.toList());
         }
 
+        @Cacheable(value = "courseHierarchy", key = "#courseId")
         public CourseHierarchyDTO getCourseHierarchy(String courseId) {
                 Course course = courseRepository.findById(courseId)
                                 .orElseThrow(() -> new ResourceNotFoundException("Course", "id", courseId));
@@ -109,6 +112,7 @@ public class StreamingService {
                 dto.setId(lesson.getId());
                 dto.setTitle(lesson.getTitle());
                 dto.setDuration(lesson.getDuration());
+                dto.setDescription(lesson.getDescription());
                 dto.setResourcePath(lesson.getResourcePath());
                 return dto;
         }

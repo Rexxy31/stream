@@ -1,18 +1,19 @@
 package com.rexxy.stream.controller;
 
+import com.rexxy.stream.model.Course;
 import com.rexxy.stream.model.Lesson;
 import com.rexxy.stream.model.LessonGroup;
+import com.rexxy.stream.model.Module;
 import com.rexxy.stream.model.StorageType;
-import com.rexxy.stream.repository.LessonGroupRepository;
-import com.rexxy.stream.repository.LessonRepository;
+import com.rexxy.stream.repository.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
 
 /**
  * Controller for importing videos from CSV file
@@ -23,11 +24,17 @@ public class CsvImportController {
 
     private final LessonRepository lessonRepository;
     private final LessonGroupRepository lessonGroupRepository;
+    private final ModuleRepository moduleRepository;
+    private final CourseRepository courseRepository;
 
     public CsvImportController(LessonRepository lessonRepository,
-            LessonGroupRepository lessonGroupRepository) {
+            LessonGroupRepository lessonGroupRepository,
+            ModuleRepository moduleRepository,
+            CourseRepository courseRepository) {
         this.lessonRepository = lessonRepository;
         this.lessonGroupRepository = lessonGroupRepository;
+        this.moduleRepository = moduleRepository;
+        this.courseRepository = courseRepository;
     }
 
     /**
@@ -129,6 +136,160 @@ public class CsvImportController {
             response.setMessage("Error: " + e.getMessage());
             response.setErrorCount(1);
             response.getErrors().add(e.getMessage());
+            return ResponseEntity.internalServerError().body(response);
+        }
+    }
+
+    /**
+     * Import full course hierarchy from CSV
+     * Format: File Name,File ID,MIME Type,Folder Path
+     */
+    @PostMapping("/course")
+    public ResponseEntity<CsvImportResponse> importCourseFromCsv(@RequestParam("file") MultipartFile file) {
+        CsvImportResponse response = new CsvImportResponse();
+        int importedCount = 0;
+        List<String> errors = new ArrayList<>();
+        int lineNumber = 0;
+
+        // Cache to avoid db lookups
+        Map<String, Course> courseMap = new HashMap<>(); // title -> Course
+        Map<String, Module> moduleMap = new HashMap<>(); // courseTitle_moduleTitle -> Module
+        Map<String, LessonGroup> groupMap = new HashMap<>(); // moduleKey_groupTitle -> LessonGroup
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
+            String line;
+            boolean isFirstLine = true;
+
+            while ((line = reader.readLine()) != null) {
+                lineNumber++;
+                if (line.trim().isEmpty())
+                    continue;
+
+                // Check header
+                if (isFirstLine) {
+                    if (line.toLowerCase().contains("file name")) {
+                        isFirstLine = false;
+                        continue;
+                    }
+                    isFirstLine = false;
+                }
+
+                try {
+                    String[] parts = parseCsvLine(line);
+                    // Expected: File Name, File ID, MIME Type, Folder Path
+                    if (parts.length < 4)
+                        continue; // Skip bad lines
+
+                    String fileName = parts[0].trim();
+                    String fileId = parts[1].trim();
+                    String mimeType = parts[2].trim();
+                    String folderPath = parts[3].trim();
+
+                    if (!mimeType.startsWith("video"))
+                        continue; // Skip non-video files
+
+                    // Parse Hierarchy: Course / Module / LessonGroup
+                    // Example: The Ultimate Java Mastery Series/Part 3 - Advanced Topics/8. The
+                    // Executive Framework (70m)
+                    String[] pathParts = folderPath.split("/");
+
+                    if (pathParts.length < 1)
+                        continue;
+
+                    String courseTitle = pathParts[0].trim();
+                    String moduleTitle = pathParts.length > 1 ? pathParts[1].trim() : "Default Module";
+                    String groupTitle = pathParts.length > 2 ? pathParts[2].trim() : "Default Group";
+
+                    // 1. Get/Create Course
+                    Course course = courseMap.get(courseTitle);
+                    if (course == null) {
+                        // Check DB roughly
+                        // For simplicity, always create new course object if not in map,
+                        // but reality check: duplicated course names in DB?
+                        // We will assume unique names for now or just standard create
+                        course = new Course();
+                        course.setTitle(courseTitle);
+                        course.setCategory("General"); // Default
+                        course.setDescription("Imported from CSV");
+                        course.setCreateDate(LocalDateTime.now());
+                        course.setModules(new ArrayList<>());
+                        course = courseRepository.save(course);
+                        courseMap.put(courseTitle, course);
+                    }
+
+                    // 2. Get/Create Module
+                    String moduleKey = courseTitle + "_" + moduleTitle;
+                    Module module = moduleMap.get(moduleKey);
+                    if (module == null) {
+                        module = new Module();
+                        module.setTitle(moduleTitle);
+                        module.setCourse(course);
+                        module.setLessonGroups(new ArrayList<>());
+                        module = moduleRepository.save(module);
+
+                        course.getModules().add(module);
+                        courseRepository.save(course); // Update parent
+
+                        moduleMap.put(moduleKey, module);
+                    }
+
+                    // 3. Get/Create LessonGroup
+                    String groupKey = moduleKey + "_" + groupTitle;
+                    LessonGroup group = groupMap.get(groupKey);
+                    if (group == null) {
+                        group = new LessonGroup();
+                        group.setTitle(groupTitle);
+                        group.setModule(module);
+                        group.setLessons(new ArrayList<>());
+                        group = lessonGroupRepository.save(group);
+
+                        module.getLessonGroups().add(group);
+                        moduleRepository.save(module); // Update parent
+
+                        groupMap.put(groupKey, group);
+                    }
+
+                    // 4. Create Lesson
+                    // Clean title: "5- Asynchronous Programming.mp4" -> "Asynchronous Programming"
+                    String lessonTitle = fileName;
+                    if (lessonTitle.endsWith(".mp4")) {
+                        lessonTitle = lessonTitle.substring(0, lessonTitle.length() - 4);
+                    }
+                    // Remove leading "X- " if present
+                    if (lessonTitle.matches("^\\d+-\\s.*")) {
+                        lessonTitle = lessonTitle.replaceFirst("^\\d+-\\s", "");
+                    }
+
+                    Lesson lesson = new Lesson();
+                    lesson.setTitle(lessonTitle);
+                    lesson.setResourcePath(fileId);
+                    lesson.setStorageType(StorageType.GOOGLE_DRIVE);
+                    lesson.setLessonGroup(group);
+
+                    // Duration? Not in this CSV. Default 0:00
+                    lesson.setDuration("0:00");
+
+                    lesson = lessonRepository.save(lesson);
+
+                    group.getLessons().add(lesson);
+                    lessonGroupRepository.save(group);
+
+                    importedCount++;
+
+                } catch (Exception e) {
+                    errors.add("Line " + lineNumber + ": " + e.getMessage());
+                }
+            }
+
+            response.setMessage(
+                    "Imported coverage: " + importedCount + " videos. Created courses: " + courseMap.size());
+            response.setErrors(errors);
+            response.setImportedCount(importedCount);
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+            response.setMessage("Error processing CSV: " + e.getMessage());
             return ResponseEntity.internalServerError().body(response);
         }
     }

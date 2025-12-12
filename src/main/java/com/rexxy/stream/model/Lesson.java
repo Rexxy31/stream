@@ -16,6 +16,7 @@ public class Lesson {
     private String id;
 
     private String title;
+    private String description;
     private String duration;
     private Integer orderIndex; // For sorting lessons within a group
 
