@@ -17,6 +17,7 @@ public class Lesson {
 
     private String title;
     private String duration;
+    private Integer orderIndex; // For sorting lessons within a group
 
     private String resourcePath; // File path for LOCAL or Google Drive file ID for GOOGLE_DRIVE
     private StorageType storageType; // LOCAL or GOOGLE_DRIVE

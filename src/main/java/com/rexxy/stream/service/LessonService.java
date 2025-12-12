@@ -8,6 +8,7 @@ import com.rexxy.stream.repository.LessonGroupRepository;
 import com.rexxy.stream.repository.LessonRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +25,7 @@ public class LessonService {
     public List<LessonDTO> getAllLessons() {
         return lessonRepository.findAll()
                 .stream()
+                .sorted(Comparator.comparing(Lesson::getOrderIndex, Comparator.nullsLast(Comparator.naturalOrder())))
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -41,6 +43,7 @@ public class LessonService {
 
         return lessonRepository.findByLessonGroup_Id(lessonGroupId)
                 .stream()
+                .sorted(Comparator.comparing(Lesson::getOrderIndex, Comparator.nullsLast(Comparator.naturalOrder())))
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -54,6 +57,7 @@ public class LessonService {
         lesson.setTitle(lessonDTO.getTitle());
         lesson.setDuration(lessonDTO.getDuration());
         lesson.setResourcePath(lessonDTO.getResourcePath());
+        lesson.setOrderIndex(lessonDTO.getOrderIndex());
 
         Lesson savedLesson = lessonRepository.save(lesson);
         return convertToDTO(savedLesson);
@@ -73,6 +77,7 @@ public class LessonService {
         lesson.setTitle(lessonDTO.getTitle());
         lesson.setDuration(lessonDTO.getDuration());
         lesson.setResourcePath(lessonDTO.getResourcePath());
+        lesson.setOrderIndex(lessonDTO.getOrderIndex());
 
         Lesson updatedLesson = lessonRepository.save(lesson);
         return convertToDTO(updatedLesson);
@@ -90,6 +95,7 @@ public class LessonService {
                 lesson.getLessonGroup().getId(),
                 lesson.getTitle(),
                 lesson.getDuration(),
-                lesson.getResourcePath());
+                lesson.getResourcePath(),
+                lesson.getOrderIndex());
     }
 }

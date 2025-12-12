@@ -23,6 +23,7 @@ public class Module {
 
     private String title;
     private String duration;
+    private Integer orderIndex; // For sorting modules within a course
 
     @DBRef
     private List<LessonGroup> lessonGroups;

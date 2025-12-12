@@ -1,4 +1,3 @@
-
 package com.rexxy.stream.dto;
 
 import lombok.AllArgsConstructor;
@@ -8,9 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LessonGroupDTO {
-    private String id;
-    private String moduleId;
-    private String title;
-    private Integer orderIndex;
+public class AuthRequest {
+    private String email;
+    private String password;
+    private String name; // Only for registration
 }

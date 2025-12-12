@@ -12,4 +12,5 @@ public class ModuleDTO {
     private String courseId;
     private String title;
     private String duration;
+    private Integer orderIndex;
 }

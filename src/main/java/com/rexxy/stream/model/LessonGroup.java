@@ -20,6 +20,7 @@ public class LessonGroup {
     @DBRef
     private Module module;
     private String title;
+    private Integer orderIndex; // For sorting lesson groups within a module
 
     @DBRef
     private List<Lesson> lessons;

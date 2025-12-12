@@ -8,6 +8,7 @@ import com.rexxy.stream.repository.CourseRepository;
 import com.rexxy.stream.repository.ModuleRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +25,7 @@ public class ModuleService {
     public List<ModuleDTO> getAllModules() {
         return moduleRepository.findAll()
                 .stream()
+                .sorted(Comparator.comparing(Module::getOrderIndex, Comparator.nullsLast(Comparator.naturalOrder())))
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -41,6 +43,7 @@ public class ModuleService {
 
         return moduleRepository.findByCourse_Id(courseId)
                 .stream()
+                .sorted(Comparator.comparing(Module::getOrderIndex, Comparator.nullsLast(Comparator.naturalOrder())))
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -53,6 +56,7 @@ public class ModuleService {
         module.setCourse(course);
         module.setTitle(moduleDTO.getTitle());
         module.setDuration(moduleDTO.getDuration());
+        module.setOrderIndex(moduleDTO.getOrderIndex());
 
         Module savedModule = moduleRepository.save(module);
         return convertToDTO(savedModule);
@@ -70,6 +74,7 @@ public class ModuleService {
 
         module.setTitle(moduleDTO.getTitle());
         module.setDuration(moduleDTO.getDuration());
+        module.setOrderIndex(moduleDTO.getOrderIndex());
 
         Module updatedModule = moduleRepository.save(module);
         return convertToDTO(updatedModule);
@@ -86,6 +91,7 @@ public class ModuleService {
                 module.getId(),
                 module.getCourse().getId(),
                 module.getTitle(),
-                module.getDuration());
+                module.getDuration(),
+                module.getOrderIndex());
     }
 }

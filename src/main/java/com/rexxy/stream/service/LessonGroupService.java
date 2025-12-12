@@ -8,6 +8,7 @@ import com.rexxy.stream.repository.LessonGroupRepository;
 import com.rexxy.stream.repository.ModuleRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +25,8 @@ public class LessonGroupService {
     public List<LessonGroupDTO> getAllLessonGroups() {
         return lessonGroupRepository.findAll()
                 .stream()
+                .sorted(Comparator.comparing(LessonGroup::getOrderIndex,
+                        Comparator.nullsLast(Comparator.naturalOrder())))
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -41,6 +44,8 @@ public class LessonGroupService {
 
         return lessonGroupRepository.findByModule_Id(moduleId)
                 .stream()
+                .sorted(Comparator.comparing(LessonGroup::getOrderIndex,
+                        Comparator.nullsLast(Comparator.naturalOrder())))
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
@@ -52,6 +57,7 @@ public class LessonGroupService {
         LessonGroup lessonGroup = new LessonGroup();
         lessonGroup.setModule(module);
         lessonGroup.setTitle(lessonGroupDTO.getTitle());
+        lessonGroup.setOrderIndex(lessonGroupDTO.getOrderIndex());
 
         LessonGroup savedLessonGroup = lessonGroupRepository.save(lessonGroup);
         return convertToDTO(savedLessonGroup);
@@ -68,6 +74,7 @@ public class LessonGroupService {
         }
 
         lessonGroup.setTitle(lessonGroupDTO.getTitle());
+        lessonGroup.setOrderIndex(lessonGroupDTO.getOrderIndex());
 
         LessonGroup updatedLessonGroup = lessonGroupRepository.save(lessonGroup);
         return convertToDTO(updatedLessonGroup);
@@ -83,6 +90,7 @@ public class LessonGroupService {
         return new LessonGroupDTO(
                 lessonGroup.getId(),
                 lessonGroup.getModule().getId(),
-                lessonGroup.getTitle());
+                lessonGroup.getTitle(),
+                lessonGroup.getOrderIndex());
     }
 }
