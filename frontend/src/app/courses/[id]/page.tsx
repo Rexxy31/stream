@@ -66,6 +66,9 @@ const item = {
 interface ProgressDTO {
     lessonId: string;
     completed: boolean;
+    watchedSeconds: number;
+    totalDurationSeconds: number;
+    lastWatchedAt?: string;
 }
 
 export default function CourseDetailPage() {
@@ -80,7 +83,8 @@ export default function CourseDetailPage() {
     const [enrolling, setEnrolling] = useState(false);
     const [expandedModules, setExpandedModules] = useState<Set<string>>(new Set());
     const [expandedLessonGroups, setExpandedLessonGroups] = useState<Set<string>>(new Set());
-    const [completedLessonIds, setCompletedLessonIds] = useState<Set<string>>(new Set());
+    const [progressMap, setProgressMap] = useState<Map<string, ProgressDTO>>(new Map());
+    const [lastWatchedLessonId, setLastWatchedLessonId] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     const [editModal, setEditModal] = useState<{
@@ -129,8 +133,32 @@ export default function CourseDetailPage() {
             if (user) {
                 try {
                     const progressData: ProgressDTO[] = await api.get(`/api/progress/course/${courseId}`);
-                    const completed = new Set(progressData.filter(p => p.completed).map(p => p.lessonId));
-                    setCompletedLessonIds(completed);
+                    const map = new Map<string, ProgressDTO>();
+                    progressData.forEach(p => map.set(p.lessonId, p));
+                    setProgressMap(map);
+
+                    // Find last watched
+                    if (progressData.length > 0) {
+                        const sorted = [...progressData].sort((a, b) => {
+                            const dateA = a.lastWatchedAt ? new Date(a.lastWatchedAt).getTime() : 0;
+                            const dateB = b.lastWatchedAt ? new Date(b.lastWatchedAt).getTime() : 0;
+                            return dateB - dateA;
+                        });
+                        const lastId = sorted[0].lessonId;
+                        setLastWatchedLessonId(lastId);
+
+                        // Auto-expand hierarchy to show last watched
+                        if (courseData) {
+                            courseData.modules.forEach(m => {
+                                m.lessonGroups.forEach(g => {
+                                    if (g.lessons.some(l => l.id === lastId)) {
+                                        setExpandedModules(prev => new Set(prev).add(m.id));
+                                        setExpandedLessonGroups(prev => new Set(prev).add(g.id));
+                                    }
+                                });
+                            });
+                        }
+                    }
                 } catch (err) {
                     console.error("Failed to fetch progress", err);
                 }
@@ -355,10 +383,23 @@ export default function CourseDetailPage() {
                                         <div>
                                             <h3 className="text-xl font-bold group-hover:text-indigo-400 transition-colors flex items-center gap-3">
                                                 {module.title}
-                                                <span className="text-sm font-normal text-slate-500 bg-slate-800 px-2 py-0.5 rounded-md">
-                                                    {module.lessonGroups.reduce((acc, g) => acc + g.lessons.filter(l => completedLessonIds.has(l.id)).length, 0)}/
-                                                    {module.lessonGroups.reduce((acc, g) => acc + g.lessons.length, 0)} Completed
-                                                </span>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-sm font-normal text-slate-500 bg-slate-800 px-2 py-0.5 rounded-md">
+                                                        {module.lessonGroups.reduce((acc, g) => acc + g.lessons.filter(l => progressMap.get(l.id)?.completed).length, 0)}/
+                                                        {module.lessonGroups.reduce((acc, g) => acc + g.lessons.length, 0)} Completed
+                                                    </span>
+                                                    {module.lessonGroups.reduce((acc, g) => acc + g.lessons.filter(l => {
+                                                        const p = progressMap.get(l.id);
+                                                        return !p?.completed && (p?.watchedSeconds || 0) > 0;
+                                                    }).length, 0) > 0 && (
+                                                            <span className="text-sm font-normal text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded-md">
+                                                                {module.lessonGroups.reduce((acc, g) => acc + g.lessons.filter(l => {
+                                                                    const p = progressMap.get(l.id);
+                                                                    return !p?.completed && (p?.watchedSeconds || 0) > 0;
+                                                                }).length, 0)} In Progress
+                                                            </span>
+                                                        )}
+                                                </div>
                                             </h3>
                                         </div>
                                     </div>
@@ -406,8 +447,19 @@ export default function CourseDetailPage() {
                                                                 <span className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
                                                                     {group.title}
                                                                     <span className="text-[10px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded">
-                                                                        {group.lessons.filter(l => completedLessonIds.has(l.id)).length}/{group.lessons.length}
+                                                                        {group.lessons.filter(l => progressMap.get(l.id)?.completed).length}/{group.lessons.length}
                                                                     </span>
+                                                                    {group.lessons.filter(l => {
+                                                                        const p = progressMap.get(l.id);
+                                                                        return !p?.completed && (p?.watchedSeconds || 0) > 0;
+                                                                    }).length > 0 && (
+                                                                            <span className="text-[10px] bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-1.5 py-0.5 rounded">
+                                                                                {group.lessons.filter(l => {
+                                                                                    const p = progressMap.get(l.id);
+                                                                                    return !p?.completed && (p?.watchedSeconds || 0) > 0;
+                                                                                }).length} In Progress
+                                                                            </span>
+                                                                        )}
                                                                 </span>
                                                                 <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform ${expandedLessonGroups.has(group.id) ? 'rotate-180' : ''}`} />
                                                             </button>
@@ -445,14 +497,26 @@ export default function CourseDetailPage() {
                                                                                             <Lock className="w-3.5 h-3.5" />
                                                                                         )}
                                                                                     </div>
-                                                                                    <span className={`font-medium transition-colors text-sm ${completedLessonIds.has(lesson.id) ? 'text-green-500' : 'text-slate-300 group-hover/lesson:text-indigo-300'
+                                                                                    <span className={`font-medium transition-colors text-sm ${progressMap.get(lesson.id)?.completed ? 'text-green-500' :
+                                                                                        lesson.id === lastWatchedLessonId ? 'text-indigo-400 font-bold' :
+                                                                                            'text-slate-300 group-hover/lesson:text-indigo-300'
                                                                                         }`}>
                                                                                         {lesson.title}
                                                                                     </span>
+                                                                                    {lesson.id === lastWatchedLessonId && (
+                                                                                        <span className="text-[10px] bg-indigo-500 text-white px-1.5 py-0.5 rounded font-bold ml-2">
+                                                                                            RESUME
+                                                                                        </span>
+                                                                                    )}
+                                                                                    {!progressMap.get(lesson.id)?.completed && (progressMap.get(lesson.id)?.watchedSeconds || 0) > 0 && (
+                                                                                        <span className="text-[10px] text-amber-500 border border-amber-500/30 px-1.5 py-0.5 rounded ml-2 font-mono">
+                                                                                            {Math.min(100, Math.round(((progressMap.get(lesson.id)?.watchedSeconds || 0) / (progressMap.get(lesson.id)?.totalDurationSeconds || 60)) * 100))}%
+                                                                                        </span>
+                                                                                    )}
                                                                                 </Link>
 
                                                                                 <div className="flex items-center gap-4">
-                                                                                    {completedLessonIds.has(lesson.id) && (
+                                                                                    {progressMap.get(lesson.id)?.completed && (
                                                                                         <CheckCircle className="w-4 h-4 text-green-500" />
                                                                                     )}
                                                                                     <span className="text-xs text-slate-600 font-mono">{lesson.duration ? lesson.duration : 'Video'}</span>
@@ -481,7 +545,7 @@ export default function CourseDetailPage() {
                         ))}
                     </motion.div>
                 </div>
-            </div>
+            </div >
 
             <EditContentModal
                 isOpen={editModal.isOpen}
@@ -490,6 +554,6 @@ export default function CourseDetailPage() {
                 type={editModal.type}
                 initialData={editModal.initialData}
             />
-        </div>
+        </div >
     );
 }

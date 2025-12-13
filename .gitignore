@@ -32,13 +32,27 @@ build/
 ### VS Code ###
 .vscode/
 
+
 # Documentation and Data Files
 *.csv
 *.txt
 *.md
-*.ps
+*.ps1
 *.json
 *.yaml
 *.yml
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# User Content
+uploads/
+
+# OS System Files
+.DS_Store
+Thumbs.db
 
 /src/main/resources/application.properties
