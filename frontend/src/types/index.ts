@@ -62,6 +62,7 @@ export interface LessonHierarchy {
 export interface LessonGroupHierarchy {
     id: string;
     title: string;
+    duration: string | null;
     lessons: LessonHierarchy[];
 }
 
@@ -77,6 +78,7 @@ export interface CourseHierarchy {
     title: string;
     description: string;
     category: string;
+    duration: string | null;
     createdAt: string;
     modules: ModuleHierarchy[];
 }

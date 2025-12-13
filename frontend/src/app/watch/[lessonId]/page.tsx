@@ -45,7 +45,7 @@ export default function WatchPage() {
     const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     // Data State
-    const [lesson, setLesson] = useState<{ id: string; title: string; duration: string | null; resourcePath: string | null; lessonGroupId: string } | null>(null);
+    const [lesson, setLesson] = useState<{ id: string; title: string; duration: string | null; resourcePath: string | null; lessonGroupId: string; courseId?: string } | null>(null);
     const [groupLessons, setGroupLessons] = useState<{ id: string; title: string; duration: string | null; orderIndex?: number }[]>([]);
     const [progress, setProgress] = useState<{ watchedSeconds: number; completed: boolean } | null>(null);
     const [loading, setLoading] = useState(true);
@@ -414,10 +414,17 @@ export default function WatchPage() {
                 className="bg-surface border-b border-theme sticky top-0 z-50"
             >
                 <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-                    <button onClick={() => router.back()} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
-                        <ChevronLeft className="w-5 h-5" />
-                        <span className="font-medium text-sm">Back to Course</span>
-                    </button>
+                    {lesson?.courseId ? (
+                        <Link href={`/courses/${lesson.courseId}`} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+                            <ChevronLeft className="w-5 h-5" />
+                            <span className="font-medium text-sm">Back to Course</span>
+                        </Link>
+                    ) : (
+                        <button onClick={() => router.back()} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+                            <ChevronLeft className="w-5 h-5" />
+                            <span className="font-medium text-sm">Back to Course</span>
+                        </button>
+                    )}
                     {progress?.completed && (
                         <motion.div
                             initial={{ scale: 0.8, opacity: 0 }}

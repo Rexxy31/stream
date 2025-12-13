@@ -6,6 +6,7 @@ import com.rexxy.stream.model.LessonGroup;
 import com.rexxy.stream.model.Module;
 import com.rexxy.stream.model.StorageType;
 import com.rexxy.stream.repository.*;
+import com.rexxy.stream.service.LessonService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,15 +27,18 @@ public class CsvImportController {
     private final LessonGroupRepository lessonGroupRepository;
     private final ModuleRepository moduleRepository;
     private final CourseRepository courseRepository;
+    private final LessonService lessonService;
 
     public CsvImportController(LessonRepository lessonRepository,
             LessonGroupRepository lessonGroupRepository,
             ModuleRepository moduleRepository,
-            CourseRepository courseRepository) {
+            CourseRepository courseRepository,
+            LessonService lessonService) {
         this.lessonRepository = lessonRepository;
         this.lessonGroupRepository = lessonGroupRepository;
         this.moduleRepository = moduleRepository;
         this.courseRepository = courseRepository;
+        this.lessonService = lessonService;
     }
 
     /**
@@ -104,9 +108,18 @@ public class CsvImportController {
                         // Create lesson
                         Lesson lesson = new Lesson();
                         lesson.setTitle(title);
+
+                        // Try to extract duration if local file exists
+                        String extracted = lessonService.extractDuration(fileId);
+                        if (extracted != null) {
+                            duration = extracted;
+                            lesson.setStorageType(StorageType.LOCAL);
+                        } else {
+                            lesson.setStorageType(StorageType.GOOGLE_DRIVE);
+                        }
+
                         lesson.setDuration(duration);
                         lesson.setResourcePath(fileId);
-                        lesson.setStorageType(StorageType.GOOGLE_DRIVE);
                         lesson.setLessonGroup(lessonGroup);
 
                         Lesson saved = lessonRepository.save(lesson);
@@ -263,11 +276,14 @@ public class CsvImportController {
                     Lesson lesson = new Lesson();
                     lesson.setTitle(lessonTitle);
                     lesson.setResourcePath(fileId);
-                    lesson.setStorageType(StorageType.GOOGLE_DRIVE);
-                    lesson.setLessonGroup(group);
-
-                    // Duration? Not in this CSV. Default 0:00
-                    lesson.setDuration("0:00");
+                    // Duration?
+                    String duration = "0:00";
+                    String extracted = lessonService.extractDuration(fileId);
+                    if (extracted != null) {
+                        duration = extracted;
+                        lesson.setStorageType(StorageType.LOCAL);
+                    }
+                    lesson.setDuration(duration);
 
                     lesson = lessonRepository.save(lesson);
 

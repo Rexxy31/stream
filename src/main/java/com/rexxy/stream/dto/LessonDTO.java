@@ -14,4 +14,5 @@ public class LessonDTO {
     private String duration;
     private String resourcePath;
     private Integer orderIndex;
+    private String courseId;
 }

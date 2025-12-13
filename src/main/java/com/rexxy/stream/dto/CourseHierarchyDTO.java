@@ -15,6 +15,7 @@ public class CourseHierarchyDTO {
     private String description;
     private String category;
     private String createdAt;
+    private String duration;
     private List<ModuleHierarchyDTO> modules;
 
     @Data
@@ -33,6 +34,7 @@ public class CourseHierarchyDTO {
     public static class LessonGroupHierarchyDTO {
         private String id;
         private String title;
+        private String duration;
         private List<LessonHierarchyDTO> lessons;
     }
 

@@ -30,6 +30,7 @@ interface Lesson {
 interface LessonGroup {
     id: string;
     title: string;
+    duration: string | null;
     lessons: Lesson[];
 }
 
@@ -45,6 +46,7 @@ interface CourseHierarchy {
     title: string;
     description: string;
     category: string;
+    duration: string | null;
     modules: Module[];
 }
 
@@ -334,6 +336,12 @@ export default function CourseDetailPage() {
                                 <PlayCircle className="w-5 h-5 text-pink-400" />
                                 <span className="font-medium text-white">{getTotalLessons()}</span> Lessons
                             </span>
+                            {course.duration && (
+                                <span className="flex items-center gap-2 bg-slate-900 px-4 py-2 rounded-lg border border-theme">
+                                    <span className="text-emerald-400 font-mono text-sm">⏱</span>
+                                    <span className="font-medium text-white">{course.duration}</span>
+                                </span>
+                            )}
                         </div>
 
                         {!enrolled ? (
@@ -388,6 +396,11 @@ export default function CourseDetailPage() {
                                                         {module.lessonGroups.reduce((acc, g) => acc + g.lessons.filter(l => progressMap.get(l.id)?.completed).length, 0)}/
                                                         {module.lessonGroups.reduce((acc, g) => acc + g.lessons.length, 0)} Completed
                                                     </span>
+                                                    {module.duration && (
+                                                        <span className="text-sm font-mono text-slate-500 bg-slate-800 px-2 py-0.5 rounded-md">
+                                                            {module.duration}
+                                                        </span>
+                                                    )}
                                                     {module.lessonGroups.reduce((acc, g) => acc + g.lessons.filter(l => {
                                                         const p = progressMap.get(l.id);
                                                         return !p?.completed && (p?.watchedSeconds || 0) > 0;
@@ -446,6 +459,11 @@ export default function CourseDetailPage() {
                                                             >
                                                                 <span className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
                                                                     {group.title}
+                                                                    {group.duration && (
+                                                                        <span className="text-[10px] sm:text-xs font-mono normal-case bg-slate-800 text-slate-400 px-2 py-0.5 rounded ml-2">
+                                                                            {group.duration}
+                                                                        </span>
+                                                                    )}
                                                                     <span className="text-[10px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded">
                                                                         {group.lessons.filter(l => progressMap.get(l.id)?.completed).length}/{group.lessons.length}
                                                                     </span>
@@ -519,7 +537,10 @@ export default function CourseDetailPage() {
                                                                                     {progressMap.get(lesson.id)?.completed && (
                                                                                         <CheckCircle className="w-4 h-4 text-green-500" />
                                                                                     )}
-                                                                                    <span className="text-xs text-slate-600 font-mono">{lesson.duration ? lesson.duration : 'Video'}</span>
+                                                                                    <span className="text-xs text-slate-600 font-mono flex items-center gap-1">
+                                                                                        {lesson.duration && <span className="text-[10px]">⏱</span>}
+                                                                                        {lesson.duration ? lesson.duration : 'Video'}
+                                                                                    </span>
                                                                                     {isAdmin && (
                                                                                         <button
                                                                                             onClick={() => setEditModal({ isOpen: true, type: 'lesson', id: lesson.id, initialData: { title: lesson.title, description: lesson.description } })}
@@ -544,7 +565,7 @@ export default function CourseDetailPage() {
                             </motion.div>
                         ))}
                     </motion.div>
-                </div>
+                </div >
             </div >
 
             <EditContentModal

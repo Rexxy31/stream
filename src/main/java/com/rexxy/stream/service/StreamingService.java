@@ -103,6 +103,13 @@ public class StreamingService {
                                                                 List<Lesson> groupLessons = lessonsByGroup.getOrDefault(
                                                                                 group.getId(), Collections.emptyList());
 
+                                                                // Calculate group duration
+                                                                List<String> lessonDurations = groupLessons.stream()
+                                                                                .map(Lesson::getDuration)
+                                                                                .collect(Collectors.toList());
+                                                                String groupDuration = sumDurations(lessonDurations);
+                                                                groupDTO.setDuration(groupDuration);
+
                                                                 List<CourseHierarchyDTO.LessonHierarchyDTO> lessonDTOs = groupLessons
                                                                                 .stream()
                                                                                 .sorted(Comparator.comparing(
@@ -118,9 +125,21 @@ public class StreamingService {
                                                         .collect(Collectors.toList());
 
                                         moduleDTO.setLessonGroups(groupDTOs);
+
+                                        // Calculate module duration
+                                        List<String> groupDurations = groupDTOs.stream()
+                                                        .map(CourseHierarchyDTO.LessonGroupHierarchyDTO::getDuration)
+                                                        .collect(Collectors.toList());
+                                        moduleDTO.setDuration(sumDurations(groupDurations));
                                         return moduleDTO;
                                 })
                                 .collect(Collectors.toList());
+
+                // Calculate course duration
+                List<String> moduleDurations = moduleDTOs.stream()
+                                .map(CourseHierarchyDTO.ModuleHierarchyDTO::getDuration)
+                                .collect(Collectors.toList());
+                dto.setDuration(sumDurations(moduleDurations));
 
                 dto.setModules(moduleDTOs);
                 return dto;
@@ -134,5 +153,37 @@ public class StreamingService {
                 dto.setDescription(lesson.getDescription());
                 dto.setResourcePath(lesson.getResourcePath());
                 return dto;
+        }
+
+        private String sumDurations(List<String> durations) {
+                long totalSeconds = 0;
+                for (String duration : durations) {
+                        if (duration == null || duration.isEmpty())
+                                continue;
+                        try {
+                                String[] parts = duration.split(":");
+                                int h = 0, m = 0, s = 0;
+                                if (parts.length == 3) {
+                                        h = Integer.parseInt(parts[0]);
+                                        m = Integer.parseInt(parts[1]);
+                                        s = Integer.parseInt(parts[2]);
+                                } else if (parts.length == 2) {
+                                        m = Integer.parseInt(parts[0]);
+                                        s = Integer.parseInt(parts[1]);
+                                }
+                                totalSeconds += (h * 3600) + (m * 60) + s;
+                        } catch (NumberFormatException ignored) {
+                        }
+                }
+
+                long hours = totalSeconds / 3600;
+                long minutes = (totalSeconds % 3600) / 60;
+                long seconds = totalSeconds % 60;
+
+                if (hours > 0) {
+                        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+                } else {
+                        return String.format("%02d:%02d", minutes, seconds);
+                }
         }
 }

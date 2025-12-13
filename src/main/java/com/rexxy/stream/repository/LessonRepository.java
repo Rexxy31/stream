@@ -12,4 +12,6 @@ public interface LessonRepository extends JpaRepository<Lesson, String> {
     List<Lesson> findByLessonGroupId(String lessonGroupId);
 
     List<Lesson> findByLessonGroupIn(List<LessonGroup> lessonGroups);
+
+    List<Lesson> findByDurationIsNullAndResourcePathIsNotNull();
 }
