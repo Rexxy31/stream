@@ -32,9 +32,9 @@ public class EnrollmentService {
                 .orElseThrow(() -> new ResourceNotFoundException("Course", "id", courseId));
 
         // Check if already enrolled
-        if (enrollmentRepository.existsByUser_IdAndCourse_Id(user.getId(), courseId)) {
+        if (enrollmentRepository.existsByUserIdAndCourseId(user.getId(), courseId)) {
             // Return existing enrollment
-            Enrollment existing = enrollmentRepository.findByUser_IdAndCourse_Id(user.getId(), courseId)
+            Enrollment existing = enrollmentRepository.findByUserIdAndCourseId(user.getId(), courseId)
                     .orElseThrow(() -> new ResourceNotFoundException("Enrollment", "courseId", courseId));
             return convertToDTO(existing);
         }
@@ -53,7 +53,7 @@ public class EnrollmentService {
      * Get all enrollments for a user
      */
     public List<EnrollmentDTO> getEnrollments(User user) {
-        return enrollmentRepository.findByUser_Id(user.getId())
+        return enrollmentRepository.findByUserId(user.getId())
                 .stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -63,7 +63,7 @@ public class EnrollmentService {
      * Get active enrollments for a user
      */
     public List<EnrollmentDTO> getActiveEnrollments(User user) {
-        return enrollmentRepository.findByUser_IdAndStatus(user.getId(), Enrollment.EnrollmentStatus.ACTIVE)
+        return enrollmentRepository.findByUserIdAndStatus(user.getId(), Enrollment.EnrollmentStatus.ACTIVE)
                 .stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -73,14 +73,14 @@ public class EnrollmentService {
      * Check if a user is enrolled in a course
      */
     public boolean isEnrolled(User user, String courseId) {
-        return enrollmentRepository.existsByUser_IdAndCourse_Id(user.getId(), courseId);
+        return enrollmentRepository.existsByUserIdAndCourseId(user.getId(), courseId);
     }
 
     /**
      * Cancel enrollment
      */
     public void cancelEnrollment(User user, String courseId) {
-        Enrollment enrollment = enrollmentRepository.findByUser_IdAndCourse_Id(user.getId(), courseId)
+        Enrollment enrollment = enrollmentRepository.findByUserIdAndCourseId(user.getId(), courseId)
                 .orElseThrow(() -> new ResourceNotFoundException("Enrollment", "courseId", courseId));
 
         enrollment.setStatus(Enrollment.EnrollmentStatus.CANCELLED);
@@ -91,7 +91,7 @@ public class EnrollmentService {
      * Mark course as completed
      */
     public EnrollmentDTO markAsCompleted(User user, String courseId) {
-        Enrollment enrollment = enrollmentRepository.findByUser_IdAndCourse_Id(user.getId(), courseId)
+        Enrollment enrollment = enrollmentRepository.findByUserIdAndCourseId(user.getId(), courseId)
                 .orElseThrow(() -> new ResourceNotFoundException("Enrollment", "courseId", courseId));
 
         enrollment.setStatus(Enrollment.EnrollmentStatus.COMPLETED);
@@ -104,7 +104,7 @@ public class EnrollmentService {
      * Get enrollment count for a course
      */
     public long getEnrollmentCount(String courseId) {
-        return enrollmentRepository.countByCourse_Id(courseId);
+        return enrollmentRepository.countByCourseId(courseId);
     }
 
     private EnrollmentDTO convertToDTO(Enrollment enrollment) {

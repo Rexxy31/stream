@@ -42,7 +42,7 @@ public class LessonService {
         lessonGroupRepository.findById(lessonGroupId)
                 .orElseThrow(() -> new ResourceNotFoundException("LessonGroup", "id", lessonGroupId));
 
-        return lessonRepository.findByLessonGroup_Id(lessonGroupId)
+        return lessonRepository.findByLessonGroupId(lessonGroupId)
                 .stream()
                 .sorted(Comparator.comparing(Lesson::getOrderIndex, Comparator.nullsLast(Comparator.naturalOrder())))
                 .map(this::convertToDTO)

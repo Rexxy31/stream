@@ -40,7 +40,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     });
                 })
                 .catch(() => {
+                    // Clear stale token from both api client and localStorage
                     api.setToken(null);
+                    localStorage.removeItem('token');
                     setUser(null);
                 })
                 .finally(() => setLoading(false));

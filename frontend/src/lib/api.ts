@@ -22,6 +22,11 @@ class ApiClient {
         return this.token;
     }
 
+    // Generic Methods
+    async get<T>(endpoint: string): Promise<T> {
+        return this.request<T>(endpoint);
+    }
+
     private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
         const headers: HeadersInit = {
             ...options.headers,

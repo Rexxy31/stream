@@ -33,7 +33,7 @@ public class ProgressService {
                 .orElseThrow(() -> new ResourceNotFoundException("Lesson", "id", request.getLessonId()));
 
         // Find existing progress or create new
-        UserProgress progress = progressRepository.findByUser_IdAndLesson_Id(user.getId(), lesson.getId())
+        UserProgress progress = progressRepository.findByUserIdAndLessonId(user.getId(), lesson.getId())
                 .orElseGet(() -> {
                     UserProgress newProgress = new UserProgress();
                     newProgress.setUser(user);
@@ -65,7 +65,7 @@ public class ProgressService {
      * Get progress for a specific lesson
      */
     public ProgressDTO getProgressForLesson(User user, String lessonId) {
-        UserProgress progress = progressRepository.findByUser_IdAndLesson_Id(user.getId(), lessonId)
+        UserProgress progress = progressRepository.findByUserIdAndLessonId(user.getId(), lessonId)
                 .orElse(null);
 
         if (progress == null) {
@@ -88,7 +88,7 @@ public class ProgressService {
      * Get all progress for a user
      */
     public List<ProgressDTO> getAllProgressForUser(User user) {
-        return progressRepository.findByUser_Id(user.getId())
+        return progressRepository.findByUserId(user.getId())
                 .stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -98,7 +98,7 @@ public class ProgressService {
      * Get progress for all lessons in a course
      */
     public List<ProgressDTO> getProgressForCourse(User user, String courseId) {
-        return progressRepository.findByUser_IdAndLesson_LessonGroup_Module_Course_Id(user.getId(), courseId)
+        return progressRepository.findByUserIdAndCourseId(user.getId(), courseId)
                 .stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
@@ -108,7 +108,7 @@ public class ProgressService {
      * Get count of completed lessons for a user
      */
     public long getCompletedLessonCount(User user) {
-        return progressRepository.countByUser_IdAndCompletedTrue(user.getId());
+        return progressRepository.countByUserIdAndCompletedTrue(user.getId());
     }
 
     /**

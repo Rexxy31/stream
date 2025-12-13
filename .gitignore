@@ -31,3 +31,14 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Documentation and Data Files
+*.csv
+*.txt
+*.md
+*.ps
+*.json
+*.yaml
+*.yml
+
+/src/main/resources/application.properties

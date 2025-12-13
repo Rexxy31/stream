@@ -1,38 +1,48 @@
 package com.rexxy.stream.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.CompoundIndex;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
-@Document(collection = "enrollments")
-@CompoundIndex(name = "user_course_idx", def = "{'user.$id': 1, 'course.$id': 1}", unique = true)
+@Entity
+@Table(name = "enrollments", uniqueConstraints = {
+        @UniqueConstraint(columnNames = { "user_id", "course_id" })
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Enrollment {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @DBRef
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
-    @DBRef
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_id", nullable = false)
+    @JsonIgnore
     private Course course;
 
+    @Enumerated(EnumType.STRING)
     private EnrollmentStatus status;
+
+    @Column(name = "enrolled_at")
     private LocalDateTime enrolledAt;
+
+    @Column(name = "completed_at")
     private LocalDateTime completedAt;
 
     public enum EnrollmentStatus {
-        ACTIVE, // Currently enrolled
-        COMPLETED, // Finished the course
-        EXPIRED, // Enrollment expired
-        CANCELLED // User cancelled
+        ACTIVE,
+        COMPLETED,
+        EXPIRED,
+        CANCELLED
     }
 }

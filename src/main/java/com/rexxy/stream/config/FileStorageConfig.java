@@ -9,4 +9,5 @@ import org.springframework.context.annotation.Configuration;
 @Data
 public class FileStorageConfig {
     private String uploadDir = "uploads/videos";
+    private String localLibraryRoot = "E:/Shared/development";
 }

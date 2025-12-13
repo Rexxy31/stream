@@ -1,23 +1,23 @@
 package com.rexxy.stream.repository;
 
 import com.rexxy.stream.model.Enrollment;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface EnrollmentRepository extends MongoRepository<Enrollment, String> {
-    Optional<Enrollment> findByUser_IdAndCourse_Id(String userId, String courseId);
+public interface EnrollmentRepository extends JpaRepository<Enrollment, String> {
+    Optional<Enrollment> findByUserIdAndCourseId(String userId, String courseId);
 
-    List<Enrollment> findByUser_Id(String userId);
+    List<Enrollment> findByUserId(String userId);
 
-    List<Enrollment> findByUser_IdAndStatus(String userId, Enrollment.EnrollmentStatus status);
+    List<Enrollment> findByUserIdAndStatus(String userId, Enrollment.EnrollmentStatus status);
 
-    List<Enrollment> findByCourse_Id(String courseId);
+    List<Enrollment> findByCourseId(String courseId);
 
-    boolean existsByUser_IdAndCourse_Id(String userId, String courseId);
+    boolean existsByUserIdAndCourseId(String userId, String courseId);
 
-    long countByCourse_Id(String courseId);
+    long countByCourseId(String courseId);
 }

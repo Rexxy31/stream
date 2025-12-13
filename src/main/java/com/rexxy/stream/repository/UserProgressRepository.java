@@ -1,21 +1,28 @@
 package com.rexxy.stream.repository;
 
 import com.rexxy.stream.model.UserProgress;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserProgressRepository extends MongoRepository<UserProgress, String> {
-    Optional<UserProgress> findByUser_IdAndLesson_Id(String userId, String lessonId);
+public interface UserProgressRepository extends JpaRepository<UserProgress, String> {
+    Optional<UserProgress> findByUserIdAndLessonId(String userId, String lessonId);
 
-    List<UserProgress> findByUser_Id(String userId);
+    List<UserProgress> findByUserId(String userId);
 
-    List<UserProgress> findByUser_IdAndLesson_LessonGroup_Module_Course_Id(String userId, String courseId);
+    @Query("SELECT up FROM UserProgress up " +
+            "JOIN up.lesson l " +
+            "JOIN l.lessonGroup lg " +
+            "JOIN lg.module m " +
+            "WHERE up.user.id = :userId AND m.course.id = :courseId")
+    List<UserProgress> findByUserIdAndCourseId(@Param("userId") String userId, @Param("courseId") String courseId);
 
-    List<UserProgress> findByUser_IdAndCompletedTrue(String userId);
+    List<UserProgress> findByUserIdAndCompletedTrue(String userId);
 
-    long countByUser_IdAndCompletedTrue(String userId);
+    long countByUserIdAndCompletedTrue(String userId);
 }

@@ -42,7 +42,7 @@ public class ModuleService {
         courseRepository.findById(courseId)
                 .orElseThrow(() -> new ResourceNotFoundException("Course", "id", courseId));
 
-        return moduleRepository.findByCourse_Id(courseId)
+        return moduleRepository.findByCourseId(courseId)
                 .stream()
                 .sorted(Comparator.comparing(Module::getOrderIndex, Comparator.nullsLast(Comparator.naturalOrder())))
                 .map(this::convertToDTO)

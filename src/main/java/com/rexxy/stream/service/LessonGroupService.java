@@ -43,7 +43,7 @@ public class LessonGroupService {
                 moduleRepository.findById(moduleId)
                                 .orElseThrow(() -> new ResourceNotFoundException("Module", "id", moduleId));
 
-                return lessonGroupRepository.findByModule_Id(moduleId)
+                return lessonGroupRepository.findByModuleId(moduleId)
                                 .stream()
                                 .sorted(Comparator.comparing(LessonGroup::getOrderIndex,
                                                 Comparator.nullsLast(Comparator.naturalOrder())))

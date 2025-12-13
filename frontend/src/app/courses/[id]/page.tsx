@@ -16,6 +16,7 @@ import {
     Lock,
     ArrowRight
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // Shared Types
 interface Lesson {
@@ -47,6 +48,26 @@ interface CourseHierarchy {
     modules: Module[];
 }
 
+const container = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1
+        }
+    }
+};
+
+const item = {
+    hidden: { opacity: 0, x: -20 },
+    show: { opacity: 1, x: 0 }
+};
+
+interface ProgressDTO {
+    lessonId: string;
+    completed: boolean;
+}
+
 export default function CourseDetailPage() {
     const params = useParams();
     const courseId = params.id as string;
@@ -59,6 +80,7 @@ export default function CourseDetailPage() {
     const [enrolling, setEnrolling] = useState(false);
     const [expandedModules, setExpandedModules] = useState<Set<string>>(new Set());
     const [expandedLessonGroups, setExpandedLessonGroups] = useState<Set<string>>(new Set());
+    const [completedLessonIds, setCompletedLessonIds] = useState<Set<string>>(new Set());
     const [error, setError] = useState<string | null>(null);
 
     const [editModal, setEditModal] = useState<{
@@ -68,23 +90,19 @@ export default function CourseDetailPage() {
         initialData: SaveData;
     }>({ isOpen: false, type: 'course', id: '', initialData: { title: '' } });
 
-
-
     const loadCourse = useCallback(async () => {
         try {
             const courseData = await api.getCourseHierarchy(courseId);
 
             // Sorting Helper
             const getSortIndex = (title: string): number => {
-                // Try "Part X"
                 const partMatch = title.match(/Part\s+(\d+)/i);
                 if (partMatch) return parseInt(partMatch[1], 10);
 
-                // Try "X- Title" or "X. Title"
                 const prefixMatch = title.match(/^(\d+)[-.]/);
                 if (prefixMatch) return parseInt(prefixMatch[1], 10);
 
-                return 999999; // Fallback for non-numbered items
+                return 999999;
             };
 
             const sortItems = <T extends { title: string }>(items: T[]): T[] => {
@@ -97,7 +115,6 @@ export default function CourseDetailPage() {
                 });
             };
 
-            // Apply Sorting
             courseData.modules = sortItems(courseData.modules);
             courseData.modules.forEach(mod => {
                 mod.lessonGroups = sortItems(mod.lessonGroups);
@@ -108,11 +125,17 @@ export default function CourseDetailPage() {
 
             setCourse(courseData);
 
+            // Fetch progress if user is logged in
+            if (user) {
+                try {
+                    const progressData: ProgressDTO[] = await api.get(`/api/progress/course/${courseId}`);
+                    const completed = new Set(progressData.filter(p => p.completed).map(p => p.lessonId));
+                    setCompletedLessonIds(completed);
+                } catch (err) {
+                    console.error("Failed to fetch progress", err);
+                }
+            }
 
-
-
-
-            // Check enrollment
             if (user) {
                 if (user.roles.includes('ADMIN')) {
                     setEnrolled(true);
@@ -139,7 +162,6 @@ export default function CourseDetailPage() {
         loadCourse();
     }, [loadCourse]);
 
-    // Handle default expansion once
     useEffect(() => {
         if (course && course.modules.length > 0 && !hasSetDefaultExpansion.current) {
             setExpandedModules(new Set([course.modules[0].id]));
@@ -196,9 +218,9 @@ export default function CourseDetailPage() {
             } else if (editModal.type === 'lesson') {
                 await api.updateLesson(editModal.id, data);
             }
-            await loadCourse(); // Refresh data
+            await loadCourse();
         } catch (error) {
-            throw error; // Re-throw to be caught by modal
+            throw error;
         }
     };
 
@@ -245,19 +267,17 @@ export default function CourseDetailPage() {
     }
 
     return (
-        <div className="min-h-screen py-24 px-4 bg-slate-950 relative overflow-x-hidden">
-            {/* Ambient Background */}
-            <div className="fixed inset-0 pointer-events-none">
-                <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-[120px]" />
-            </div>
-
-            <div className="max-w-6xl mx-auto relative z-10">
+        <div className="min-h-screen py-24 px-4 bg-background">
+            <div className="max-w-6xl mx-auto">
                 {/* Header Card */}
-                <div className="glass rounded-3xl p-8 md:p-12 mb-12 border-purple-500/10 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-purple-500/10 to-pink-500/10 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2"></div>
-
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="bg-surface rounded-2xl p-8 md:p-12 mb-12 border border-theme shadow-xl relative overflow-hidden"
+                >
                     <div className="relative z-10">
-                        <span className="inline-block px-4 py-1.5 bg-purple-500/20 border border-purple-500/20 text-purple-300 rounded-full text-sm font-bold tracking-wide uppercase mb-6">
+                        <span className="inline-block px-4 py-1.5 bg-slate-800 border border-slate-700 text-slate-300 rounded-full text-sm font-bold tracking-wide uppercase mb-6">
                             {course.category}
                         </span>
 
@@ -267,7 +287,7 @@ export default function CourseDetailPage() {
                             </h1>
                             {isAdmin && (
                                 <button
-                                    onClick={() => setEditModal({ isOpen: true, type: 'course', id: course.id, initialData: { title: course.title, description: course.description, category: course.category } })}
+                                    onClick={() => setEditModal({ isOpen: false, type: 'course', id: course.id, initialData: { title: course.title, description: course.description, category: course.category } })}
                                     className="p-2 bg-slate-800 rounded-lg hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
                                 >
                                     <Edit2 className="w-5 h-5" />
@@ -275,127 +295,191 @@ export default function CourseDetailPage() {
                             )}
                         </div>
 
-                        <p className="text-xl text-slate-300 mb-8 max-w-3xl leading-relaxed">{course.description}</p>
+                        <p className="text-xl text-muted mb-8 max-w-3xl leading-relaxed">{course.description}</p>
 
                         <div className="flex flex-wrap items-center gap-8 text-slate-400 mb-8">
-                            <span className="flex items-center gap-2 bg-slate-900/50 px-4 py-2 rounded-lg border border-slate-700/50">
-                                <BookOpen className="w-5 h-5 text-purple-400" />
-                                <span className="font-medium text-slate-200">{course.modules.length}</span> Modules
+                            <span className="flex items-center gap-2 bg-slate-900 px-4 py-2 rounded-lg border border-theme">
+                                <BookOpen className="w-5 h-5 text-indigo-400" />
+                                <span className="font-medium text-white">{course.modules.length}</span> Modules
                             </span>
-                            <span className="flex items-center gap-2 bg-slate-900/50 px-4 py-2 rounded-lg border border-slate-700/50">
+                            <span className="flex items-center gap-2 bg-slate-900 px-4 py-2 rounded-lg border border-theme">
                                 <PlayCircle className="w-5 h-5 text-pink-400" />
-                                <span className="font-medium text-slate-200">{getTotalLessons()}</span> Lessons
+                                <span className="font-medium text-white">{getTotalLessons()}</span> Lessons
                             </span>
                         </div>
 
                         {!enrolled ? (
-                            <button
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
                                 onClick={handleEnroll}
                                 disabled={enrolling}
-                                className="group relative px-8 py-4 bg-white text-slate-900 rounded-full font-bold text-lg hover:bg-slate-100 transition-all shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] disabled:opacity-50"
+                                className="group relative px-8 py-4 bg-indigo-600 text-white rounded-lg font-bold text-lg hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/20 disabled:opacity-50"
                             >
                                 {enrolling ? 'Enrolling...' : 'Enroll Now - Free'}
                                 <ArrowRight className="ml-2 w-5 h-5 inline-block transition-transform group-hover:translate-x-1" />
-                            </button>
+                            </motion.button>
                         ) : (
-                            <span className="inline-flex items-center gap-2 px-6 py-3 bg-green-500/10 border border-green-500/20 text-green-400 rounded-full font-bold text-lg">
+                            <span className="inline-flex items-center gap-2 px-6 py-3 bg-green-500/10 border border-green-500/20 text-green-400 rounded-lg font-bold text-lg">
                                 <CheckCircle className="w-6 h-6" />
                                 Enrolled
                             </span>
                         )}
                     </div>
-                </div>
+                </motion.div>
 
                 {/* Course Content */}
                 <div className="space-y-6">
-                    <h2 className="text-3xl font-bold mb-8 text-white">Course Content</h2>
+                    <motion.h2
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.2 }}
+                        className="text-2xl font-bold mb-8 text-white tracking-tight"
+                    >
+                        Course Content
+                    </motion.h2>
 
-                    {course.modules.map((module, moduleIndex) => (
-                        <div key={module.id} className="glass-card rounded-2xl overflow-hidden border border-slate-800">
-                            <div className="w-full flex items-center justify-between p-6 hover:bg-white/5 transition-colors">
-                                <button onClick={() => toggleModule(module.id)} className="flex items-center gap-6 flex-1 text-left">
-                                    <div className="w-12 h-12 bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl flex items-center justify-center border border-slate-700 shadow-inner">
-                                        <span className="text-purple-400 font-bold text-lg">{moduleIndex + 1}</span>
-                                    </div>
-                                    <div>
-                                        <span className="block text-xl font-bold text-slate-200 mb-1">{module.title}</span>
-                                        <span className="text-sm text-slate-500">{module.lessonGroups.reduce((acc, g) => acc + g.lessons.length, 0)} Lessons</span>
-                                    </div>
-                                </button>
-
-                                <div className="flex items-center gap-4">
-                                    {isAdmin && (
-                                        <button
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                setEditModal({ isOpen: true, type: 'module', id: module.id, initialData: { title: module.title } });
-                                            }}
-                                            className="p-2 text-slate-500 hover:text-white transition-colors"
-                                        >
-                                            <Edit2 className="w-4 h-4" />
-                                        </button>
-                                    )}
-                                    <div className={`w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center transition-transform duration-300 pointer-events-none ${expandedModules.has(module.id) ? 'rotate-180 bg-purple-500/20 text-purple-400' : 'text-slate-500'}`}>
-                                        <ChevronDown className="w-5 h-5" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Animated Content Expansion */}
-                            <div className={`transition-all duration-300 ease-in-out ${expandedModules.has(module.id) ? 'max-h-[60vh] opacity-100 overflow-y-auto' : 'max-h-0 opacity-0 overflow-hidden'}`}>
-                                <div className="border-t border-slate-800 bg-black/20">
-                                    {module.lessonGroups.map((group) => (
-                                        <div key={group.id} className="border-b border-slate-800/50 last:border-b-0">
-                                            {group.title !== "Default Group" ? (
-                                                <button
-                                                    onClick={() => toggleLessonGroup(group.id)}
-                                                    className="w-full flex items-center justify-between px-6 py-3 bg-slate-900/50 border-b border-slate-800/30 hover:bg-slate-900/80 transition-colors"
-                                                >
-                                                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">{group.title}</span>
-                                                    <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform ${expandedLessonGroups.has(group.id) ? 'rotate-180' : ''}`} />
-                                                </button>
-                                            ) : null}
-                                            <div className={`overflow-hidden transition-all duration-300 ${group.title !== "Default Group" ? (expandedLessonGroups.has(group.id) ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0') : 'max-h-full opacity-100'}`}>
-                                                <div className="divide-y divide-slate-800/30">
-                                                    {group.lessons.map((lesson) => (
-                                                        <div key={lesson.id} className="group/lesson flex items-center justify-between px-8 py-5 hover:bg-white/5 transition-colors">
-                                                            <Link
-                                                                href={enrolled ? `/watch/${lesson.id}` : '#'}
-                                                                className={`flex items-center gap-4 flex-1 transition-all ${enrolled
-                                                                    ? 'cursor-pointer'
-                                                                    : 'opacity-50 cursor-not-allowed grayscale'
-                                                                    }`}
-                                                                onClick={(e) => !enrolled && e.preventDefault()}
-                                                            >
-                                                                <div className={`w-8 h-8 rounded-lg flex items-center justify-center border ${enrolled ? 'bg-purple-500/10 border-purple-500/30 text-purple-400' : 'bg-slate-800 border-slate-700 text-slate-600'}`}>
-                                                                    {enrolled ? (
-                                                                        <Play className="w-4 h-4" />
-                                                                    ) : (
-                                                                        <Lock className="w-4 h-4" />
-                                                                    )}
-                                                                </div>
-                                                                <span className="text-slate-300 font-medium group-hover/lesson:text-purple-300 transition-colors">{lesson.title}</span>
-                                                                <span className="text-sm text-slate-600">{lesson.duration ? lesson.duration : 'Video'}</span>
-                                                            </Link>
-
-                                                            {isAdmin && (
-                                                                <button
-                                                                    onClick={() => setEditModal({ isOpen: true, type: 'lesson', id: lesson.id, initialData: { title: lesson.title, description: lesson.description } })}
-                                                                    className="opacity-0 group-hover/lesson:opacity-100 p-2 text-slate-500 hover:text-white transition-all ml-4"
-                                                                >
-                                                                    <Edit2 className="w-4 h-4" />
-                                                                </button>
-                                                            )}
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </div>
+                    <motion.div
+                        variants={container}
+                        initial="hidden"
+                        animate="show"
+                        className="space-y-4"
+                    >
+                        {course.modules.map((module, moduleIndex) => (
+                            <motion.div key={module.id} variants={item} className="bg-surface rounded-xl overflow-hidden border border-theme">
+                                <div className="w-full flex items-center justify-between p-6 hover:bg-slate-800/50 transition-colors cursor-pointer" onClick={() => toggleModule(module.id)}>
+                                    <div className="flex items-center gap-6 flex-1">
+                                        <div className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center border border-slate-700 font-mono text-indigo-400 font-bold">
+                                            {moduleIndex + 1}
                                         </div>
-                                    ))}
+                                        <div>
+                                            <h3 className="text-xl font-bold group-hover:text-indigo-400 transition-colors flex items-center gap-3">
+                                                {module.title}
+                                                <span className="text-sm font-normal text-slate-500 bg-slate-800 px-2 py-0.5 rounded-md">
+                                                    {module.lessonGroups.reduce((acc, g) => acc + g.lessons.filter(l => completedLessonIds.has(l.id)).length, 0)}/
+                                                    {module.lessonGroups.reduce((acc, g) => acc + g.lessons.length, 0)} Completed
+                                                </span>
+                                            </h3>
+                                        </div>
+                                    </div>
+
+                                    <div className="flex items-center gap-4">
+                                        {isAdmin && (
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    setEditModal({ isOpen: true, type: 'module', id: module.id, initialData: { title: module.title } });
+                                                }}
+                                                className="p-2 text-slate-500 hover:text-white transition-colors"
+                                            >
+                                                <Edit2 className="w-4 h-4" />
+                                            </button>
+                                        )}
+                                        <motion.div
+                                            animate={{ rotate: expandedModules.has(module.id) ? 180 : 0 }}
+                                            transition={{ duration: 0.3 }}
+                                            className={`w-8 h-8 rounded-lg flex items-center justify-center ${expandedModules.has(module.id) ? 'text-white' : 'text-slate-500'}`}
+                                        >
+                                            <ChevronDown className="w-5 h-5" />
+                                        </motion.div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    ))}
+
+                                {/* Animated Content Expansion */}
+                                <AnimatePresence initial={false}>
+                                    {expandedModules.has(module.id) && (
+                                        <motion.div
+                                            initial={{ height: 0, opacity: 0 }}
+                                            animate={{ height: "auto", opacity: 1 }}
+                                            exit={{ height: 0, opacity: 0 }}
+                                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                                            className="overflow-hidden"
+                                        >
+                                            <div className="border-t border-theme bg-black/20">
+                                                {module.lessonGroups.map((group) => (
+                                                    <div key={group.id} className="border-b border-theme last:border-b-0">
+                                                        {group.title !== "Default Group" ? (
+                                                            <button
+                                                                onClick={() => toggleLessonGroup(group.id)}
+                                                                className="w-full flex items-center justify-between px-6 py-3 bg-slate-900/30 border-b border-slate-800/30 hover:bg-slate-900/50 transition-colors"
+                                                            >
+                                                                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
+                                                                    {group.title}
+                                                                    <span className="text-[10px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded">
+                                                                        {group.lessons.filter(l => completedLessonIds.has(l.id)).length}/{group.lessons.length}
+                                                                    </span>
+                                                                </span>
+                                                                <ChevronDown className={`w-4 h-4 text-slate-500 transition-transform ${expandedLessonGroups.has(group.id) ? 'rotate-180' : ''}`} />
+                                                            </button>
+                                                        ) : null}
+
+                                                        {/* Nested Lesson Group Expansion */}
+                                                        <AnimatePresence initial={false}>
+                                                            {(group.title === "Default Group" || expandedLessonGroups.has(group.id)) && (
+                                                                <motion.div
+                                                                    initial={group.title !== "Default Group" ? { height: 0, opacity: 0 } : false}
+                                                                    animate={{ height: "auto", opacity: 1 }}
+                                                                    exit={{ height: 0, opacity: 0 }}
+                                                                    transition={{ duration: 0.3 }}
+                                                                    className="overflow-hidden"
+                                                                >
+                                                                    <div className="divide-y divide-slate-800/30">
+                                                                        {group.lessons.map((lesson) => (
+                                                                            <motion.div
+                                                                                key={lesson.id}
+                                                                                whileHover={{ backgroundColor: "rgba(30, 41, 59, 0.5)" }}
+                                                                                className="group/lesson flex items-center justify-between px-8 py-4 transition-colors"
+                                                                            >
+                                                                                <Link
+                                                                                    href={enrolled ? `/watch/${lesson.id}` : '#'}
+                                                                                    className={`flex items-center gap-4 flex-1 transition-all ${enrolled
+                                                                                        ? 'cursor-pointer'
+                                                                                        : 'opacity-50 cursor-not-allowed grayscale'
+                                                                                        }`}
+                                                                                    onClick={(e) => !enrolled && e.preventDefault()}
+                                                                                >
+                                                                                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center border ${enrolled ? 'bg-indigo-500/10 border-indigo-500/20 text-indigo-400' : 'bg-slate-800 border-slate-700 text-slate-600'}`}>
+                                                                                        {enrolled ? (
+                                                                                            <Play className="w-3.5 h-3.5" />
+                                                                                        ) : (
+                                                                                            <Lock className="w-3.5 h-3.5" />
+                                                                                        )}
+                                                                                    </div>
+                                                                                    <span className={`font-medium transition-colors text-sm ${completedLessonIds.has(lesson.id) ? 'text-green-500' : 'text-slate-300 group-hover/lesson:text-indigo-300'
+                                                                                        }`}>
+                                                                                        {lesson.title}
+                                                                                    </span>
+                                                                                </Link>
+
+                                                                                <div className="flex items-center gap-4">
+                                                                                    {completedLessonIds.has(lesson.id) && (
+                                                                                        <CheckCircle className="w-4 h-4 text-green-500" />
+                                                                                    )}
+                                                                                    <span className="text-xs text-slate-600 font-mono">{lesson.duration ? lesson.duration : 'Video'}</span>
+                                                                                    {isAdmin && (
+                                                                                        <button
+                                                                                            onClick={() => setEditModal({ isOpen: true, type: 'lesson', id: lesson.id, initialData: { title: lesson.title, description: lesson.description } })}
+                                                                                            className="opacity-0 group-hover/lesson:opacity-100 p-2 text-slate-500 hover:text-white transition-all"
+                                                                                        >
+                                                                                            <Edit2 className="w-3.5 h-3.5" />
+                                                                                        </button>
+                                                                                    )}
+                                                                                </div>
+                                                                            </motion.div>
+                                                                        ))}
+                                                                    </div>
+                                                                </motion.div>
+                                                            )}
+                                                        </AnimatePresence>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
+                            </motion.div>
+                        ))}
+                    </motion.div>
                 </div>
             </div>
 

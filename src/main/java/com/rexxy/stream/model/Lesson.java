@@ -1,29 +1,41 @@
 package com.rexxy.stream.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "lessons")
+@Entity
+@Table(name = "lessons")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class Lesson {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    @Column(nullable = false)
     private String title;
+
+    @Column(columnDefinition = "TEXT")
     private String description;
+
     private String duration;
-    private Integer orderIndex; // For sorting lessons within a group
 
-    private String resourcePath; // File path for LOCAL or Google Drive file ID for GOOGLE_DRIVE
-    private StorageType storageType; // LOCAL or GOOGLE_DRIVE
+    @Column(name = "order_index")
+    private Integer orderIndex;
 
-    @DBRef
+    @Column(name = "resource_path")
+    private String resourcePath;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "storage_type")
+    private StorageType storageType;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lesson_group_id", nullable = false)
+    @JsonIgnore
     private LessonGroup lessonGroup;
-
 }

@@ -63,6 +63,10 @@ public class SecurityConfig {
                         // Enrollment count - public
                         .requestMatchers(HttpMethod.GET, "/api/enrollments/count/**").permitAll()
 
+                        // Import endpoints - public (for admin use)
+                        .requestMatchers("/api/import/**").permitAll()
+                        .requestMatchers("/api/csv-import/**").permitAll()
+
                         // Static resources
                         .requestMatchers("/", "/index.html", "/static/**", "/*.js", "/*.css", "/*.ico").permitAll()
 

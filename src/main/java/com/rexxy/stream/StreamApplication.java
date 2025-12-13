@@ -8,7 +8,8 @@ import java.util.TimeZone;
 public class StreamApplication {
 
 	public static void main(String[] args) {
-		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Kolkata"));
+		// Use UTC for database compatibility - display timezone handled by Jackson
+		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 		SpringApplication.run(StreamApplication.class, args);
 	}
 

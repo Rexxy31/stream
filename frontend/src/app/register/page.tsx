@@ -36,50 +36,50 @@ export default function RegisterPage() {
     return (
         <div className="min-h-[calc(100vh-64px)] flex items-center justify-center p-4">
             <div className="w-full max-w-md">
-                <div className="bg-slate-800/50 rounded-2xl p-8 border border-slate-700/50 backdrop-blur-sm">
-                    <h1 className="text-3xl font-bold text-center mb-2">Create Account</h1>
-                    <p className="text-slate-400 text-center mb-8">Start your learning journey</p>
+                <div className="bg-surface rounded-2xl p-8 border border-theme shadow-xl">
+                    <h1 className="text-3xl font-bold text-center mb-2 tracking-tight">Create Account</h1>
+                    <p className="text-muted text-center mb-8">Start your learning journey</p>
 
                     {error && (
-                        <div className="bg-red-500/10 border border-red-500/50 text-red-400 px-4 py-3 rounded-lg mb-6">
+                        <div className="bg-red-900/20 border border-red-500/20 text-red-400 px-4 py-3 rounded-lg mb-6 text-sm">
                             {error}
                         </div>
                     )}
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
-                        <div>
-                            <label className="block text-sm font-medium text-slate-300 mb-2">Name</label>
+                    <form onSubmit={handleSubmit} className="space-y-5">
+                        <div className="space-y-2">
+                            <label className="block text-sm font-medium text-slate-300">Name</label>
                             <input
                                 type="text"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 required
-                                className="w-full bg-slate-900/50 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+                                className="w-full bg-background border border-theme rounded-lg px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
                                 placeholder="John Doe"
                             />
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-slate-300 mb-2">Email</label>
+                        <div className="space-y-2">
+                            <label className="block text-sm font-medium text-slate-300">Email</label>
                             <input
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                                className="w-full bg-slate-900/50 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+                                className="w-full bg-background border border-theme rounded-lg px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
                                 placeholder="you@example.com"
                             />
                         </div>
 
-                        <div>
-                            <label className="block text-sm font-medium text-slate-300 mb-2">Password</label>
+                        <div className="space-y-2">
+                            <label className="block text-sm font-medium text-slate-300">Password</label>
                             <input
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                                 minLength={6}
-                                className="w-full bg-slate-900/50 border border-slate-600 rounded-lg px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+                                className="w-full bg-background border border-theme rounded-lg px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
                                 placeholder="••••••••"
                             />
                         </div>
@@ -87,15 +87,15 @@ export default function RegisterPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-lg font-semibold hover:from-purple-500 hover:to-pink-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-2"
                         >
                             {loading ? 'Creating account...' : 'Create account'}
                         </button>
                     </form>
 
-                    <p className="text-center text-slate-400 mt-6">
+                    <p className="text-center text-muted mt-8 text-sm">
                         Already have an account?{' '}
-                        <Link href="/login" className="text-purple-400 hover:text-purple-300">
+                        <Link href="/login" className="text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
                             Sign in
                         </Link>
                     </p>

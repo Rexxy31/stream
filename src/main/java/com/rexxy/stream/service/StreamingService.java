@@ -63,10 +63,16 @@ public class StreamingService {
                 dto.setCreatedAt(course.getCreateDate().toString());
 
                 // Query modules by courseId
-                List<Module> modules = moduleRepository.findByCourse_Id(courseId);
+                List<Module> modules = moduleRepository.findByCourseId(courseId);
 
                 // Batch fetch LessonGroups
                 List<LessonGroup> allGroups = lessonGroupRepository.findByModuleIn(modules);
+
+                // Batch fetch Lessons
+                List<Lesson> allLessons = lessonRepository.findByLessonGroupIn(allGroups);
+                Map<String, List<Lesson>> lessonsByGroup = allLessons.stream()
+                                .filter(l -> l.getLessonGroup() != null)
+                                .collect(Collectors.groupingBy(l -> l.getLessonGroup().getId()));
 
                 // Group in memory
                 Map<String, List<LessonGroup>> groupsByModule = allGroups.stream()
@@ -94,10 +100,8 @@ public class StreamingService {
                                                                 groupDTO.setId(group.getId());
                                                                 groupDTO.setTitle(group.getTitle());
 
-                                                                List<Lesson> groupLessons = group.getLessons();
-                                                                if (groupLessons == null) {
-                                                                        groupLessons = Collections.emptyList();
-                                                                }
+                                                                List<Lesson> groupLessons = lessonsByGroup.getOrDefault(
+                                                                                group.getId(), Collections.emptyList());
 
                                                                 List<CourseHierarchyDTO.LessonHierarchyDTO> lessonDTOs = groupLessons
                                                                                 .stream()

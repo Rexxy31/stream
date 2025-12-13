@@ -1,34 +1,46 @@
 package com.rexxy.stream.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.CompoundIndex;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
-@Document(collection = "user_progress")
-@CompoundIndex(name = "user_lesson_idx", def = "{'user.$id': 1, 'lesson.$id': 1}", unique = true)
+@Entity
+@Table(name = "user_progress", uniqueConstraints = {
+        @UniqueConstraint(columnNames = { "user_id", "lesson_id" })
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserProgress {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @DBRef
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
-    @DBRef
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lesson_id", nullable = false)
+    @JsonIgnore
     private Lesson lesson;
 
-    private Integer watchedSeconds; // How many seconds the user has watched
-    private Integer totalDurationSeconds; // Total video duration in seconds
-    private Boolean completed; // Has the user marked this as complete?
+    @Column(name = "watched_seconds")
+    private Integer watchedSeconds;
 
+    @Column(name = "total_duration_seconds")
+    private Integer totalDurationSeconds;
+
+    private Boolean completed;
+
+    @Column(name = "last_watched_at")
     private LocalDateTime lastWatchedAt;
+
+    @Column(name = "completed_at")
     private LocalDateTime completedAt;
 }
