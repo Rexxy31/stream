@@ -23,6 +23,8 @@ export interface Course {
     title: string;
     description: string;
     category: string;
+    thumbnail?: string;
+    tags?: string[];
     createDate: string;
 }
 
@@ -78,6 +80,8 @@ export interface CourseHierarchy {
     title: string;
     description: string;
     category: string;
+    thumbnail?: string;
+    tags?: string[];
     duration: string | null;
     createdAt: string;
     modules: ModuleHierarchy[];
@@ -105,6 +109,7 @@ export interface Enrollment {
     status: 'ACTIVE' | 'COMPLETED' | 'EXPIRED' | 'CANCELLED';
     enrolledAt: string;
     completedAt: string | null;
+    progress?: number;
 }
 
 // Search

@@ -7,6 +7,8 @@ export interface SaveData {
     title: string;
     description?: string;
     category?: string;
+    thumbnail?: string;
+    tags?: string[];
     orderIndex?: number;
 }
 
@@ -22,6 +24,9 @@ export default function EditContentModal({ isOpen, onClose, onSave, type, initia
     const [title, setTitle] = useState(initialData.title);
     const [description, setDescription] = useState(initialData.description || '');
     const [category, setCategory] = useState(initialData.category || '');
+    const [thumbnail, setThumbnail] = useState(initialData.thumbnail || '');
+    const [tags, setTags] = useState<string[]>(initialData.tags || []);
+    const [tagInput, setTagInput] = useState('');
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -29,6 +34,9 @@ export default function EditContentModal({ isOpen, onClose, onSave, type, initia
             setTitle(initialData.title);
             setDescription(initialData.description || '');
             setCategory(initialData.category || '');
+            setThumbnail(initialData.thumbnail || '');
+            setTags(initialData.tags || []);
+            setTagInput('');
         }
     }, [isOpen, initialData]);
 
@@ -40,7 +48,11 @@ export default function EditContentModal({ isOpen, onClose, onSave, type, initia
         try {
             const data: SaveData = { title };
             if (type !== 'module') data.description = description;
-            if (type === 'course') data.category = category;
+            if (type === 'course') {
+                data.category = category;
+                data.thumbnail = thumbnail;
+                data.tags = tags;
+            }
 
             await onSave(data);
             onClose();
@@ -50,6 +62,21 @@ export default function EditContentModal({ isOpen, onClose, onSave, type, initia
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleAddTag = (e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' || e.key === ',') {
+            e.preventDefault();
+            const trimmed = tagInput.trim();
+            if (trimmed && !tags.includes(trimmed)) {
+                setTags([...tags, trimmed]);
+                setTagInput('');
+            }
+        }
+    };
+
+    const removeTag = (tagToRemove: string) => {
+        setTags(tags.filter(tag => tag !== tagToRemove));
     };
 
     return (
@@ -70,15 +97,52 @@ export default function EditContentModal({ isOpen, onClose, onSave, type, initia
                         </div>
 
                         {type === 'course' && (
-                            <div>
-                                <label className="block text-sm font-medium text-slate-400 mb-1">Category</label>
-                                <input
-                                    type="text"
-                                    value={category}
-                                    onChange={(e) => setCategory(e.target.value)}
-                                    className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 transition-colors"
-                                />
-                            </div>
+                            <>
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-400 mb-1">Category</label>
+                                    <input
+                                        type="text"
+                                        value={category}
+                                        onChange={(e) => setCategory(e.target.value)}
+                                        className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 transition-colors"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-400 mb-1">Thumbnail URL</label>
+                                    <input
+                                        type="text"
+                                        value={thumbnail}
+                                        onChange={(e) => setThumbnail(e.target.value)}
+                                        placeholder="https://example.com/image.jpg"
+                                        className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 transition-colors"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-400 mb-1">Tags</label>
+                                    <div className="flex flex-wrap gap-2 mb-2">
+                                        {tags.map(tag => (
+                                            <span key={tag} className="bg-purple-500/20 text-purple-300 px-2 py-1 rounded text-sm flex items-center gap-1">
+                                                {tag}
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeTag(tag)}
+                                                    className="hover:text-white"
+                                                >
+                                                    &times;
+                                                </button>
+                                            </span>
+                                        ))}
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={tagInput}
+                                        onChange={(e) => setTagInput(e.target.value)}
+                                        onKeyDown={handleAddTag}
+                                        placeholder="Type and press Enter to add tag"
+                                        className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-purple-500 transition-colors"
+                                    />
+                                </div>
+                            </>
                         )}
 
                         {type !== 'module' && (

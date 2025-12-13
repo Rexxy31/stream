@@ -24,5 +24,8 @@ public interface UserProgressRepository extends JpaRepository<UserProgress, Stri
 
     List<UserProgress> findByUserIdAndCompletedTrue(String userId);
 
+    @Query("SELECT COUNT(up) FROM UserProgress up JOIN up.lesson l JOIN l.lessonGroup lg JOIN lg.module m WHERE up.user.id = :userId AND m.course.id = :courseId AND up.completed = true")
+    long countCompletedLessons(@Param("userId") String userId, @Param("courseId") String courseId);
+
     long countByUserIdAndCompletedTrue(String userId);
 }

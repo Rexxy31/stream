@@ -19,6 +19,8 @@ export default function Navbar() {
         }
     };
 
+    if (pathname?.startsWith('/watch')) return null;
+
     return (
         <motion.nav
             initial={{ y: -100 }}
@@ -151,4 +153,5 @@ export default function Navbar() {
             </div>
         </motion.nav>
     );
+
 }

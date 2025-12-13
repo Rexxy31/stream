@@ -12,5 +12,7 @@ public class CourseDTO {
     private String title;
     private String description;
     private String category;
+    private String thumbnail;
     private String createdAt;
+    private java.util.List<String> tags;
 }

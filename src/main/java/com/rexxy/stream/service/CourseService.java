@@ -32,19 +32,23 @@ public class CourseService {
         return convertToDTO(course);
     }
 
-    @CacheEvict(value = "courseHierarchy", allEntries = true)
+    @CacheEvict(value = "courseHierarchyV2", allEntries = true)
     public CourseDTO createCourse(CourseDTO courseDTO) {
         Course course = new Course();
         course.setTitle(courseDTO.getTitle());
         course.setDescription(courseDTO.getDescription());
         course.setCategory(courseDTO.getCategory());
+        course.setThumbnail(courseDTO.getThumbnail());
         course.setCreateDate(LocalDateTime.now());
+        if (courseDTO.getTags() != null) {
+            course.setTags(courseDTO.getTags());
+        }
 
         Course savedCourse = courseRepository.save(course);
         return convertToDTO(savedCourse);
     }
 
-    @CacheEvict(value = "courseHierarchy", allEntries = true)
+    @CacheEvict(value = "courseHierarchyV2", allEntries = true)
     public CourseDTO updateCourse(String id, CourseDTO courseDTO) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Course", "id", id));
@@ -52,12 +56,16 @@ public class CourseService {
         course.setTitle(courseDTO.getTitle());
         course.setDescription(courseDTO.getDescription());
         course.setCategory(courseDTO.getCategory());
+        course.setThumbnail(courseDTO.getThumbnail());
+        if (courseDTO.getTags() != null) {
+            course.setTags(courseDTO.getTags());
+        }
 
         Course updatedCourse = courseRepository.save(course);
         return convertToDTO(updatedCourse);
     }
 
-    @CacheEvict(value = "courseHierarchy", allEntries = true)
+    @CacheEvict(value = "courseHierarchyV2", allEntries = true)
     public void deleteCourse(String id) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Course", "id", id));
@@ -70,6 +78,8 @@ public class CourseService {
                 course.getTitle(),
                 course.getDescription(),
                 course.getCategory(),
-                course.getCreateDate().toString());
+                course.getThumbnail(),
+                course.getCreateDate().toString(),
+                course.getTags());
     }
 }

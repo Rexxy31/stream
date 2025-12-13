@@ -47,7 +47,7 @@ function SearchContent() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-slate-900 to-black py-12 px-4">
+        <div className="min-h-screen bg-gradient-to-b from-slate-900 to-black pt-24 pb-12 px-4">
             <div className="max-w-5xl mx-auto">
                 {/* Header */}
                 <div className="mb-10">

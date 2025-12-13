@@ -18,10 +18,17 @@ public class EnrollmentService {
 
     private final EnrollmentRepository enrollmentRepository;
     private final CourseRepository courseRepository;
+    private final com.rexxy.stream.repository.UserProgressRepository userProgressRepository;
+    private final com.rexxy.stream.repository.LessonRepository lessonRepository;
 
-    public EnrollmentService(EnrollmentRepository enrollmentRepository, CourseRepository courseRepository) {
+    public EnrollmentService(EnrollmentRepository enrollmentRepository,
+            CourseRepository courseRepository,
+            com.rexxy.stream.repository.UserProgressRepository userProgressRepository,
+            com.rexxy.stream.repository.LessonRepository lessonRepository) {
         this.enrollmentRepository = enrollmentRepository;
         this.courseRepository = courseRepository;
+        this.userProgressRepository = userProgressRepository;
+        this.lessonRepository = lessonRepository;
     }
 
     /**
@@ -117,6 +124,24 @@ public class EnrollmentService {
                 course.getCategory(),
                 enrollment.getStatus(),
                 enrollment.getEnrolledAt() != null ? enrollment.getEnrolledAt().toString() : null,
-                enrollment.getCompletedAt() != null ? enrollment.getCompletedAt().toString() : null);
+                enrollment.getCompletedAt() != null ? enrollment.getCompletedAt().toString() : null,
+                calculateProgress(enrollment));
+    }
+
+    private int calculateProgress(Enrollment enrollment) {
+        if (enrollment.getStatus() == Enrollment.EnrollmentStatus.COMPLETED) {
+            return 100;
+        }
+
+        String userId = enrollment.getUser().getId();
+        String courseId = enrollment.getCourse().getId();
+
+        long totalLessons = lessonRepository.countByCourseId(courseId);
+        if (totalLessons == 0)
+            return 0;
+
+        long completedLessons = userProgressRepository.countCompletedLessons(userId, courseId);
+
+        return (int) ((completedLessons * 100) / totalLessons);
     }
 }

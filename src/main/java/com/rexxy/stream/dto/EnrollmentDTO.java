@@ -17,4 +17,5 @@ public class EnrollmentDTO {
     private Enrollment.EnrollmentStatus status;
     private String enrolledAt;
     private String completedAt;
+    private Integer progress;
 }

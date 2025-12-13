@@ -76,6 +76,11 @@ export default function WatchPage() {
     });
     const [error, setError] = useState<string | null>(null);
 
+    // Auto-Play State
+    const [nextLesson, setNextLesson] = useState<{ id: string; title: string } | null>(null);
+    const [showAutoPlay, setShowAutoPlay] = useState(false);
+    const [autoPlayTimer, setAutoPlayTimer] = useState(5);
+
     // Load Theater Mode preference
     useEffect(() => {
         const savedMode = localStorage.getItem('theaterMode');
@@ -121,6 +126,42 @@ export default function WatchPage() {
             })
             .finally(() => setLoading(false));
     }, [lessonId, user, router, authLoading]);
+
+    // Calculate Next Lesson
+    useEffect(() => {
+        if (lesson && groupLessons.length > 0) {
+            const currentIndex = groupLessons.findIndex(l => l.id === lesson.id);
+            if (currentIndex !== -1 && currentIndex < groupLessons.length - 1) {
+                setNextLesson(groupLessons[currentIndex + 1]);
+            } else {
+                setNextLesson(null);
+            }
+        }
+    }, [lesson, groupLessons]);
+
+    // Auto-Play Timer
+    useEffect(() => {
+        let interval: NodeJS.Timeout;
+        if (showAutoPlay && autoPlayTimer > 0) {
+            interval = setInterval(() => {
+                setAutoPlayTimer(prev => prev - 1);
+            }, 1000);
+        } else if (showAutoPlay && autoPlayTimer === 0) {
+            if (nextLesson) {
+                router.push(`/watch/${nextLesson.id}`);
+            }
+        }
+        return () => clearInterval(interval);
+    }, [showAutoPlay, autoPlayTimer, nextLesson, router]);
+
+    const cancelAutoPlay = () => {
+        setShowAutoPlay(false);
+        setAutoPlayTimer(5);
+    };
+
+    const playNextNow = () => {
+        if (nextLesson) router.push(`/watch/${nextLesson.id}`);
+    };
 
     // Handle Controls Visibility
     const handleMouseMove = useCallback(() => {
@@ -464,7 +505,15 @@ export default function WatchPage() {
                                             onWaiting={() => setIsBuffering(true)}
                                             onPlaying={() => setIsBuffering(false)}
                                             onTimeUpdate={handleTimeUpdate}
-                                            onEnded={() => { setIsPlaying(false); setShowControls(true); }}
+                                            onTimeUpdate={handleTimeUpdate}
+                                            onEnded={() => {
+                                                setIsPlaying(false);
+                                                setShowControls(true);
+                                                if (nextLesson) {
+                                                    setShowAutoPlay(true);
+                                                    setAutoPlayTimer(5);
+                                                }
+                                            }}
                                             onError={handleVideoError}
                                             crossOrigin="anonymous"
                                             onClick={togglePlay}
@@ -514,7 +563,7 @@ export default function WatchPage() {
 
                                         {/* Big Play Button Overlay (when paused or start) */}
                                         <AnimatePresence>
-                                            {!isPlaying && !isBuffering && (
+                                            {!isPlaying && !isBuffering && !showAutoPlay && (
                                                 <motion.div
                                                     initial={{ opacity: 0, scale: 0.5 }}
                                                     animate={{ opacity: 1, scale: 1 }}
@@ -529,6 +578,57 @@ export default function WatchPage() {
                                                     >
                                                         <Play className="w-8 h-8 text-white ml-1 fill-white" />
                                                     </motion.div>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+
+                                        {/* Auto-Play Next Overlay */}
+                                        <AnimatePresence>
+                                            {showAutoPlay && nextLesson && (
+                                                <motion.div
+                                                    initial={{ opacity: 0 }}
+                                                    animate={{ opacity: 1 }}
+                                                    exit={{ opacity: 0 }}
+                                                    className="absolute inset-0 z-40 bg-black/80 flex flex-col items-center justify-center text-center p-8"
+                                                >
+                                                    <div className="text-slate-400 font-medium mb-2 uppercase tracking-wider text-sm">Up Next</div>
+                                                    <h3 className="text-2xl font-bold text-white mb-6 max-w-lg">{nextLesson.title}</h3>
+
+                                                    <div className="relative w-24 h-24 mb-8 flex items-center justify-center">
+                                                        <svg className="w-full h-full -rotate-90">
+                                                            <circle
+                                                                cx="48" cy="48" r="40"
+                                                                fill="transparent"
+                                                                stroke="#334155"
+                                                                strokeWidth="4"
+                                                            />
+                                                            <circle
+                                                                cx="48" cy="48" r="40"
+                                                                fill="transparent"
+                                                                stroke="#4f46e5"
+                                                                strokeWidth="4"
+                                                                strokeDasharray="251.2"
+                                                                strokeDashoffset={251.2 - (251.2 * autoPlayTimer) / 5}
+                                                                className="transition-all duration-1000 ease-linear"
+                                                            />
+                                                        </svg>
+                                                        <span className="absolute text-3xl font-bold text-white font-mono">{autoPlayTimer}</span>
+                                                    </div>
+
+                                                    <div className="flex gap-4">
+                                                        <button
+                                                            onClick={cancelAutoPlay}
+                                                            className="px-6 py-2 rounded-full border border-slate-600 text-slate-300 hover:bg-white/10 transition-colors font-medium"
+                                                        >
+                                                            Cancel
+                                                        </button>
+                                                        <button
+                                                            onClick={playNextNow}
+                                                            className="px-8 py-2 rounded-full bg-indigo-600 text-white hover:bg-indigo-500 transition-colors font-bold shadow-lg shadow-indigo-500/25 flex items-center gap-2"
+                                                        >
+                                                            <Play className="w-4 h-4 fill-current" /> Play Now
+                                                        </button>
+                                                    </div>
                                                 </motion.div>
                                             )}
                                         </AnimatePresence>

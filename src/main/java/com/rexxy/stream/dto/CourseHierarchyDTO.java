@@ -14,8 +14,10 @@ public class CourseHierarchyDTO {
     private String title;
     private String description;
     private String category;
+    private String thumbnail;
     private String createdAt;
     private String duration;
+    private java.util.List<String> tags;
     private List<ModuleHierarchyDTO> modules;
 
     @Data

@@ -146,6 +146,7 @@ public class AdminController {
      * Update Course
      */
     @PutMapping("/courses/{id}")
+    @org.springframework.cache.annotation.CacheEvict(value = "courseHierarchyV2", allEntries = true)
     public ResponseEntity<com.rexxy.stream.model.Course> updateCourse(@AuthenticationPrincipal User user,
             @PathVariable String id, @RequestBody UpdateCourseRequest request) {
         if (!isAdmin(user))
@@ -158,6 +159,10 @@ public class AdminController {
                 course.setDescription(request.getDescription());
             if (request.getCategory() != null)
                 course.setCategory(request.getCategory());
+            if (request.getThumbnail() != null)
+                course.setThumbnail(request.getThumbnail());
+            if (request.getTags() != null)
+                course.setTags(request.getTags());
             return ResponseEntity.ok(courseRepository.save(course));
         }).orElse(ResponseEntity.notFound().build());
     }
@@ -166,6 +171,7 @@ public class AdminController {
      * Update Module
      */
     @PutMapping("/modules/{id}")
+    @org.springframework.cache.annotation.CacheEvict(value = "courseHierarchyV2", allEntries = true)
     public ResponseEntity<com.rexxy.stream.model.Module> updateModule(@AuthenticationPrincipal User user,
             @PathVariable String id, @RequestBody UpdateModuleRequest request) {
         if (!isAdmin(user))
@@ -184,6 +190,7 @@ public class AdminController {
      * Update Lesson
      */
     @PutMapping("/lessons/{id}")
+    @org.springframework.cache.annotation.CacheEvict(value = "courseHierarchyV2", allEntries = true)
     public ResponseEntity<com.rexxy.stream.model.Lesson> updateLesson(@AuthenticationPrincipal User user,
             @PathVariable String id, @RequestBody UpdateLessonRequest request) {
         if (!isAdmin(user))

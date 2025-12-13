@@ -13,6 +13,7 @@ import com.rexxy.stream.repository.LessonRepository;
 import com.rexxy.stream.repository.ModuleRepository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -46,11 +47,14 @@ public class StreamingService {
                                                 course.getTitle(),
                                                 course.getDescription(),
                                                 course.getCategory(),
-                                                course.getCreateDate().toString()))
+                                                course.getThumbnail(),
+                                                course.getCreateDate().toString(),
+                                                new java.util.ArrayList<>(course.getTags())))
                                 .collect(Collectors.toList());
         }
 
-        @Cacheable(value = "courseHierarchy", key = "#courseId")
+        @Cacheable(value = "courseHierarchyV2", key = "#courseId")
+        @Transactional(readOnly = true)
         public CourseHierarchyDTO getCourseHierarchy(String courseId) {
                 Course course = courseRepository.findById(courseId)
                                 .orElseThrow(() -> new ResourceNotFoundException("Course", "id", courseId));
@@ -60,7 +64,9 @@ public class StreamingService {
                 dto.setTitle(course.getTitle());
                 dto.setDescription(course.getDescription());
                 dto.setCategory(course.getCategory());
+                dto.setThumbnail(course.getThumbnail());
                 dto.setCreatedAt(course.getCreateDate().toString());
+                dto.setTags(new java.util.ArrayList<>(course.getTags()));
 
                 // Query modules by courseId
                 List<Module> modules = moduleRepository.findByCourseId(courseId);

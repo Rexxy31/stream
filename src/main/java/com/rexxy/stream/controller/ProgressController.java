@@ -112,4 +112,16 @@ public class ProgressController {
         return ResponseEntity.ok(Map.of(
                 "completedLessons", completedCount));
     }
+
+    /**
+     * Get study activity heatmap data
+     */
+    @GetMapping("/activity")
+    public ResponseEntity<Map<String, Long>> getActivity(@AuthenticationPrincipal User user) {
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        return ResponseEntity.ok(progressService.getStudyActivity(user));
+    }
 }

@@ -26,6 +26,7 @@ public class Course {
     private String description;
 
     private String category;
+    private String thumbnail;
 
     @Column(name = "create_date")
     private LocalDateTime createDate;
@@ -33,4 +34,9 @@ public class Course {
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("orderIndex ASC")
     private List<Module> modules = new ArrayList<>();
+
+    @ElementCollection
+    @CollectionTable(name = "course_tags", joinColumns = @JoinColumn(name = "course_id"))
+    @Column(name = "tag")
+    private List<String> tags = new ArrayList<>();
 }

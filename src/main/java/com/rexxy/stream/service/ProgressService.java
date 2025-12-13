@@ -112,6 +112,19 @@ public class ProgressService {
     }
 
     /**
+     * Get study activity (completed lessons by date) for the last 365 days
+     */
+    public java.util.Map<String, Long> getStudyActivity(User user) {
+        List<UserProgress> completed = progressRepository.findByUserIdAndCompletedTrue(user.getId());
+
+        return completed.stream()
+                .filter(p -> p.getCompletedAt() != null)
+                .collect(Collectors.groupingBy(
+                        p -> p.getCompletedAt().toLocalDate().toString(),
+                        Collectors.counting()));
+    }
+
+    /**
      * Mark a lesson as complete
      */
     public ProgressDTO markAsComplete(User user, String lessonId) {

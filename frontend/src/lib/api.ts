@@ -135,6 +135,10 @@ class ApiClient {
         return this.request<{ completedLessons: number }>('/api/progress/stats');
     }
 
+    async getStudyActivity() {
+        return this.request<Record<string, number>>('/api/progress/activity');
+    }
+
     // Enrollments
     async enroll(courseId: string) {
         return this.request<{ id: string; courseId: string; status: string }>(`/api/enrollments/enroll/${courseId}`, {

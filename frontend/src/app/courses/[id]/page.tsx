@@ -17,6 +17,7 @@ import {
     ArrowRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Skeleton } from '@/components/ui/Skeleton';
 
 // Shared Types
 interface Lesson {
@@ -46,6 +47,7 @@ interface CourseHierarchy {
     title: string;
     description: string;
     category: string;
+    tags?: string[];
     duration: string | null;
     modules: Module[];
 }
@@ -167,15 +169,11 @@ export default function CourseDetailPage() {
             }
 
             if (user) {
-                if (user.roles.includes('ADMIN')) {
-                    setEnrolled(true);
-                } else {
-                    try {
-                        const enrollmentData = await api.checkEnrollment(courseId);
-                        setEnrolled(enrollmentData.enrolled);
-                    } catch {
-                        setEnrolled(false);
-                    }
+                try {
+                    const enrollmentData = await api.checkEnrollment(courseId);
+                    setEnrolled(enrollmentData.enrolled);
+                } catch {
+                    setEnrolled(false);
                 }
             }
         } catch (error) {
@@ -265,9 +263,30 @@ export default function CourseDetailPage() {
     if (loading) {
         return (
             <div className="min-h-screen pt-32 px-4 bg-slate-950">
-                <div className="max-w-6xl mx-auto animate-pulse">
-                    <div className="h-10 bg-slate-800 rounded w-1/2 mb-4" />
-                    <div className="h-6 bg-slate-800 rounded w-3/4 mb-8" />
+                <div className="max-w-6xl mx-auto space-y-12">
+                    {/* Header Skeleton */}
+                    <div className="p-8 md:p-12 rounded-2xl border border-slate-800 bg-slate-900/20">
+                        <Skeleton className="h-6 w-24 rounded-full mb-6" />
+                        <div className="flex justify-between items-start mb-6">
+                            <Skeleton className="h-16 w-3/4" />
+                            <Skeleton className="h-10 w-10 rounded-lg" />
+                        </div>
+                        <Skeleton className="h-20 w-full mb-8" />
+                        <div className="flex gap-4 mb-8">
+                            <Skeleton className="h-10 w-32" />
+                            <Skeleton className="h-10 w-32" />
+                            <Skeleton className="h-10 w-32" />
+                        </div>
+                        <Skeleton className="h-14 w-48 rounded-lg" />
+                    </div>
+
+                    {/* Content Skeleton */}
+                    <div className="space-y-4">
+                        <Skeleton className="h-8 w-48 mb-8" />
+                        {[1, 2, 3].map((i) => (
+                            <Skeleton key={i} className="h-24 w-full rounded-xl" />
+                        ))}
+                    </div>
                 </div>
             </div>
         );
@@ -297,19 +316,28 @@ export default function CourseDetailPage() {
     }
 
     return (
-        <div className="min-h-screen py-24 px-4 bg-background">
+        <div className="min-h-screen pt-32 pb-24 px-4 bg-background">
             <div className="max-w-6xl mx-auto">
                 {/* Header Card */}
+
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
-                    className="bg-surface rounded-2xl p-8 md:p-12 mb-12 border border-theme shadow-xl relative overflow-hidden"
+                    className="bg-slate-900/60 backdrop-blur-xl rounded-2xl p-8 md:p-12 mb-12 border border-white/10 shadow-2xl relative overflow-hidden"
                 >
+                    <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-pink-500/10 pointer-events-none" />
                     <div className="relative z-10">
-                        <span className="inline-block px-4 py-1.5 bg-slate-800 border border-slate-700 text-slate-300 rounded-full text-sm font-bold tracking-wide uppercase mb-6">
-                            {course.category}
-                        </span>
+                        <div className="flex flex-wrap items-center gap-2 mb-6">
+                            <span className="inline-block px-4 py-1.5 bg-slate-800 border border-slate-700 text-slate-300 rounded-full text-sm font-bold tracking-wide uppercase">
+                                {course.category}
+                            </span>
+                            {course.tags?.map(tag => (
+                                <span key={tag} className="inline-block px-3 py-1.5 bg-purple-500/10 border border-purple-500/20 text-purple-300 rounded-full text-xs font-medium">
+                                    #{tag}
+                                </span>
+                            ))}
+                        </div>
 
                         <div className="flex items-start justify-between gap-4 mb-6">
                             <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tight flex-1">
@@ -317,7 +345,7 @@ export default function CourseDetailPage() {
                             </h1>
                             {isAdmin && (
                                 <button
-                                    onClick={() => setEditModal({ isOpen: false, type: 'course', id: course.id, initialData: { title: course.title, description: course.description, category: course.category } })}
+                                    onClick={() => setEditModal({ isOpen: true, type: 'course', id: course.id, initialData: { title: course.title, description: course.description, category: course.category, tags: course.tags } })}
                                     className="p-2 bg-slate-800 rounded-lg hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
                                 >
                                     <Edit2 className="w-5 h-5" />
@@ -382,8 +410,8 @@ export default function CourseDetailPage() {
                         className="space-y-4"
                     >
                         {course.modules.map((module, moduleIndex) => (
-                            <motion.div key={module.id} variants={item} className="bg-surface rounded-xl overflow-hidden border border-theme">
-                                <div className="w-full flex items-center justify-between p-6 hover:bg-slate-800/50 transition-colors cursor-pointer" onClick={() => toggleModule(module.id)}>
+                            <motion.div key={module.id} variants={item} className="bg-slate-900/40 backdrop-blur-md rounded-xl overflow-hidden border border-white/5 hover:border-indigo-500/30 transition-colors">
+                                <div className="w-full flex items-center justify-between p-6 hover:bg-white/5 transition-colors cursor-pointer" onClick={() => toggleModule(module.id)}>
                                     <div className="flex items-center gap-6 flex-1">
                                         <div className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center border border-slate-700 font-mono text-indigo-400 font-bold">
                                             {moduleIndex + 1}

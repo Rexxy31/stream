@@ -13,5 +13,8 @@ public interface LessonRepository extends JpaRepository<Lesson, String> {
 
     List<Lesson> findByLessonGroupIn(List<LessonGroup> lessonGroups);
 
+    @org.springframework.data.jpa.repository.Query("SELECT COUNT(l) FROM Lesson l JOIN l.lessonGroup lg JOIN lg.module m WHERE m.course.id = :courseId")
+    long countByCourseId(@org.springframework.data.repository.query.Param("courseId") String courseId);
+
     List<Lesson> findByDurationIsNullAndResourcePathIsNotNull();
 }
