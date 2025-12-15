@@ -337,16 +337,78 @@ export default function WatchPage() {
         }
     }, [volume, previousVolume]);
 
-    // Fullscreen
-    const toggleFullscreen = useCallback(() => {
+    // Fullscreen with landscape orientation for mobile
+    const toggleFullscreen = useCallback(async () => {
         if (!playerContainerRef.current) return;
 
-        if (!document.fullscreenElement) {
-            playerContainerRef.current.requestFullscreen().catch(console.error);
-            setIsFullscreen(true);
+        const elem = playerContainerRef.current as any;
+
+        // Check if already in fullscreen
+        const isCurrentlyFullscreen =
+            document.fullscreenElement ||
+            (document as any).webkitFullscreenElement ||
+            (document as any).mozFullScreenElement ||
+            (document as any).msFullscreenElement;
+
+        if (!isCurrentlyFullscreen) {
+            // Request fullscreen with vendor prefixes for mobile support
+            try {
+                if (elem.requestFullscreen) {
+                    await elem.requestFullscreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    // iOS Safari
+                    elem.webkitRequestFullscreen();
+                } else if (elem.webkitEnterFullscreen) {
+                    // Older iOS
+                    elem.webkitEnterFullscreen();
+                } else if (elem.mozRequestFullScreen) {
+                    await elem.mozRequestFullScreen();
+                } else if (elem.msRequestFullscreen) {
+                    await elem.msRequestFullscreen();
+                }
+
+                // Lock orientation to landscape for mobile
+                if (screen.orientation && (screen.orientation as any).lock) {
+                    try {
+                        await (screen.orientation as any).lock('landscape').catch(() => {
+                            // Fallback: Try landscape-primary if landscape fails
+                            (screen.orientation as any).lock('landscape-primary').catch(console.error);
+                        });
+                    } catch (err) {
+                        console.log('Orientation lock not supported');
+                    }
+                }
+
+                setIsFullscreen(true);
+            } catch (error) {
+                console.error('Fullscreen error:', error);
+            }
         } else {
-            document.exitFullscreen().catch(console.error);
-            setIsFullscreen(false);
+            // Exit fullscreen with vendor prefixes
+            try {
+                if (document.exitFullscreen) {
+                    await document.exitFullscreen();
+                } else if ((document as any).webkitExitFullscreen) {
+                    (document as any).webkitExitFullscreen();
+                } else if ((document as any).mozCancelFullScreen) {
+                    (document as any).mozCancelFullScreen();
+                } else if ((document as any).msExitFullscreen) {
+                    (document as any).msExitFullscreen();
+                }
+
+                // Unlock orientation when exiting fullscreen
+                if (screen.orientation && (screen.orientation as any).unlock) {
+                    try {
+                        (screen.orientation as any).unlock();
+                    } catch (err) {
+                        console.log('Orientation unlock not supported');
+                    }
+                }
+
+                setIsFullscreen(false);
+            } catch (error) {
+                console.error('Exit fullscreen error:', error);
+            }
         }
     }, []);
 
@@ -384,7 +446,32 @@ export default function WatchPage() {
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [togglePlay, isFullscreen, toggleFullscreen]);
+    }, [togglePlay, isFullscreen, toggleFullscreen, toggleMute]);
+
+    // Listen for fullscreen changes (important for mobile)
+    useEffect(() => {
+        const handleFullscreenChange = () => {
+            const isCurrentlyFullscreen = !!(
+                document.fullscreenElement ||
+                (document as any).webkitFullscreenElement ||
+                (document as any).mozFullScreenElement ||
+                (document as any).msFullscreenElement
+            );
+            setIsFullscreen(isCurrentlyFullscreen);
+        };
+
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+        document.addEventListener('msfullscreenchange', handleFullscreenChange);
+
+        return () => {
+            document.removeEventListener('fullscreenchange', handleFullscreenChange);
+            document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+            document.removeEventListener('mozfullscreenchange', handleFullscreenChange);
+            document.removeEventListener('msfullscreenchange', handleFullscreenChange);
+        };
+    }, []);
 
 
     const handleVideoError = (e: React.SyntheticEvent<HTMLVideoElement, Event>) => {
@@ -447,41 +534,10 @@ export default function WatchPage() {
     const embedUrl = isDriveFile ? `https://drive.google.com/file/d/${resourcePath}/preview` : undefined;
 
     return (
-        <div className="min-h-screen bg-background text-foreground">
-            {/* Navbar */}
-            <motion.div
-                initial={{ y: -50, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                className="bg-surface border-b border-theme sticky top-0 z-50"
-            >
-                <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-                    {lesson?.courseId ? (
-                        <Link href={`/courses/${lesson.courseId}`} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
-                            <ChevronLeft className="w-5 h-5" />
-                            <span className="font-medium text-sm">Back to Course</span>
-                        </Link>
-                    ) : (
-                        <button onClick={() => router.back()} className="flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
-                            <ChevronLeft className="w-5 h-5" />
-                            <span className="font-medium text-sm">Back to Course</span>
-                        </button>
-                    )}
-                    {progress?.completed && (
-                        <motion.div
-                            initial={{ scale: 0.8, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            className="flex items-center gap-2 px-3 py-1 bg-green-900/20 border border-green-500/20 rounded-full"
-                        >
-                            <CheckCircle className="w-4 h-4 text-green-500" />
-                            <span className="text-green-500 text-xs font-bold uppercase tracking-wider">Completed</span>
-                        </motion.div>
-                    )}
-                </div>
-            </motion.div>
-
+        <div className="min-h-screen bg-background text-foreground pt-16">
             {/* Main Layout */}
-            <div className={`mx-auto transition-all duration-500 ${isFullscreen ? 'max-w-full p-0' : isTheaterMode ? 'w-full max-w-full px-0 py-0 bg-black' : 'max-w-7xl px-4 py-8'}`}>
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className={`mx-auto transition-all duration-500 ${isFullscreen ? 'max-w-full p-0' : isTheaterMode ? 'w-full max-w-full px-0 py-0 bg-black' : 'max-w-7xl px-2 sm:px-4 py-4 sm:py-8'}`}>
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-8">
 
                     {/* Video Player Column */}
                     <div className={`transition-all duration-500 ${isFullscreen ? 'lg:col-span-3 fixed inset-0 z-50 bg-black' : isTheaterMode ? 'lg:col-span-3' : 'lg:col-span-2'}`}>
@@ -490,7 +546,7 @@ export default function WatchPage() {
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ duration: 0.5 }}
                             ref={playerContainerRef}
-                            className={`relative bg-black overflow-hidden group shadow-2xl ${isFullscreen ? 'w-full h-full' : isTheaterMode ? 'w-full h-[80vh] rounded-none border-b border-theme/20' : 'rounded-2xl aspect-video border border-theme'}`}
+                            className={`relative bg-black overflow-hidden group shadow-2xl ${isFullscreen ? 'w-full h-full' : isTheaterMode ? 'w-full h-[80vh] rounded-none border-b border-theme/20' : 'rounded-lg sm:rounded-2xl aspect-video border border-theme'}`}
                             onMouseMove={handleMouseMove}
                             onMouseLeave={() => isPlaying && setShowControls(false)}
                         >
@@ -505,7 +561,6 @@ export default function WatchPage() {
                                             onWaiting={() => setIsBuffering(true)}
                                             onPlaying={() => setIsBuffering(false)}
                                             onTimeUpdate={handleTimeUpdate}
-                                            onTimeUpdate={handleTimeUpdate}
                                             onEnded={() => {
                                                 setIsPlaying(false);
                                                 setShowControls(true);
@@ -516,7 +571,6 @@ export default function WatchPage() {
                                             }}
                                             onError={handleVideoError}
                                             crossOrigin="anonymous"
-                                            onClick={togglePlay}
                                         >
                                             <source src={streamUrl} type="video/mp4" />
                                             {/* Subtitle Track */}
@@ -568,15 +622,19 @@ export default function WatchPage() {
                                                     initial={{ opacity: 0, scale: 0.5 }}
                                                     animate={{ opacity: 1, scale: 1 }}
                                                     exit={{ opacity: 0, scale: 1.5 }}
-                                                    className="absolute inset-0 flex items-center justify-center bg-black/40 z-20 cursor-pointer"
+                                                    className="absolute inset-0 flex items-center justify-center bg-black/40 z-20 cursor-pointer touch-none"
                                                     onClick={togglePlay}
+                                                    onTouchEnd={(e) => {
+                                                        e.preventDefault();
+                                                        togglePlay();
+                                                    }}
                                                 >
                                                     <motion.div
                                                         whileHover={{ scale: 1.1 }}
                                                         whileTap={{ scale: 0.9 }}
-                                                        className="w-20 h-20 bg-indigo-600/90 rounded-full flex items-center justify-center backdrop-blur-sm"
+                                                        className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-indigo-600/90 rounded-full flex items-center justify-center backdrop-blur-sm shadow-lg pointer-events-none"
                                                     >
-                                                        <Play className="w-8 h-8 text-white ml-1 fill-white" />
+                                                        <Play className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white ml-1 fill-white" />
                                                     </motion.div>
                                                 </motion.div>
                                             )}
@@ -589,42 +647,46 @@ export default function WatchPage() {
                                                     initial={{ opacity: 0 }}
                                                     animate={{ opacity: 1 }}
                                                     exit={{ opacity: 0 }}
-                                                    className="absolute inset-0 z-40 bg-black/80 flex flex-col items-center justify-center text-center p-8"
+                                                    className="absolute inset-0 z-40 bg-black/80 flex flex-col items-center justify-center text-center p-4 sm:p-8"
                                                 >
-                                                    <div className="text-slate-400 font-medium mb-2 uppercase tracking-wider text-sm">Up Next</div>
-                                                    <h3 className="text-2xl font-bold text-white mb-6 max-w-lg">{nextLesson.title}</h3>
+                                                    <div className="text-slate-400 font-medium mb-2 uppercase tracking-wider text-xs sm:text-sm">Up Next</div>
+                                                    <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white mb-4 sm:mb-6 max-w-lg px-4">{nextLesson.title}</h3>
 
-                                                    <div className="relative w-24 h-24 mb-8 flex items-center justify-center">
+                                                    <div className="relative w-20 h-20 sm:w-24 sm:h-24 mb-6 sm:mb-8 flex items-center justify-center">
                                                         <svg className="w-full h-full -rotate-90">
                                                             <circle
-                                                                cx="48" cy="48" r="40"
+                                                                cx={window.innerWidth < 640 ? "40" : "48"}
+                                                                cy={window.innerWidth < 640 ? "40" : "48"}
+                                                                r={window.innerWidth < 640 ? "32" : "40"}
                                                                 fill="transparent"
                                                                 stroke="#334155"
                                                                 strokeWidth="4"
                                                             />
                                                             <circle
-                                                                cx="48" cy="48" r="40"
+                                                                cx={window.innerWidth < 640 ? "40" : "48"}
+                                                                cy={window.innerWidth < 640 ? "40" : "48"}
+                                                                r={window.innerWidth < 640 ? "32" : "40"}
                                                                 fill="transparent"
                                                                 stroke="#4f46e5"
                                                                 strokeWidth="4"
-                                                                strokeDasharray="251.2"
-                                                                strokeDashoffset={251.2 - (251.2 * autoPlayTimer) / 5}
+                                                                strokeDasharray={window.innerWidth < 640 ? "201" : "251.2"}
+                                                                strokeDashoffset={window.innerWidth < 640 ? (201 - (201 * autoPlayTimer) / 5) : (251.2 - (251.2 * autoPlayTimer) / 5)}
                                                                 className="transition-all duration-1000 ease-linear"
                                                             />
                                                         </svg>
-                                                        <span className="absolute text-3xl font-bold text-white font-mono">{autoPlayTimer}</span>
+                                                        <span className="absolute text-2xl sm:text-3xl font-bold text-white font-mono">{autoPlayTimer}</span>
                                                     </div>
 
-                                                    <div className="flex gap-4">
+                                                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full max-w-xs sm:max-w-none px-4">
                                                         <button
                                                             onClick={cancelAutoPlay}
-                                                            className="px-6 py-2 rounded-full border border-slate-600 text-slate-300 hover:bg-white/10 transition-colors font-medium"
+                                                            className="px-6 py-2.5 sm:py-2 rounded-full border border-slate-600 text-slate-300 hover:bg-white/10 transition-colors font-medium text-sm sm:text-base w-full sm:w-auto"
                                                         >
                                                             Cancel
                                                         </button>
                                                         <button
                                                             onClick={playNextNow}
-                                                            className="px-8 py-2 rounded-full bg-indigo-600 text-white hover:bg-indigo-500 transition-colors font-bold shadow-lg shadow-indigo-500/25 flex items-center gap-2"
+                                                            className="px-8 py-2.5 sm:py-2 rounded-full bg-indigo-600 text-white hover:bg-indigo-500 transition-colors font-bold shadow-lg shadow-indigo-500/25 flex items-center justify-center gap-2 text-sm sm:text-base w-full sm:w-auto"
                                                         >
                                                             <Play className="w-4 h-4 fill-current" /> Play Now
                                                         </button>
@@ -637,10 +699,10 @@ export default function WatchPage() {
                                         <motion.div
                                             animate={{ opacity: showControls ? 1 : 0 }}
                                             transition={{ duration: 0.3 }}
-                                            className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-6 pt-20 z-30"
+                                            className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-2 sm:p-4 md:p-6 pt-12 sm:pt-16 md:pt-20 z-30"
                                         >
                                             {/* Progress Bar */}
-                                            <div className="mb-4 relative group/progress">
+                                            <div className="mb-2 sm:mb-3 md:mb-4 relative group/progress">
                                                 <input
                                                     type="range"
                                                     min={0}
@@ -654,13 +716,13 @@ export default function WatchPage() {
                                                 />
                                             </div>
 
-                                            <div className="flex items-center justify-between">
-                                                <div className="flex items-center gap-4 md:gap-6">
-                                                    <button onClick={togglePlay} className="text-white hover:text-indigo-400 transition-colors">
+                                            <div className="flex items-center justify-between gap-1 sm:gap-2">
+                                                <div className="flex items-center gap-2 sm:gap-3 md:gap-6">
+                                                    <button onClick={togglePlay} className="text-white hover:text-indigo-400 transition-colors p-1">
                                                         {isPlaying ? (
-                                                            <Pause className="w-6 h-6 md:w-8 md:h-8 fill-current" />
+                                                            <Pause className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 fill-current" />
                                                         ) : (
-                                                            <Play className="w-6 h-6 md:w-8 md:h-8 fill-current" />
+                                                            <Play className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 fill-current" />
                                                         )}
                                                     </button>
 
@@ -672,13 +734,13 @@ export default function WatchPage() {
                                                         <RotateCw className="w-5 h-5" />
                                                     </button>
 
-                                                    <div className="flex items-center gap-3 group/volume">
+                                                    <div className="hidden sm:flex items-center gap-2 md:gap-3 group/volume">
                                                         <button
                                                             onClick={toggleMute}
-                                                            className="text-white hover:text-indigo-400 transition-colors"
+                                                            className="text-white hover:text-indigo-400 transition-colors p-1"
                                                             title={volume === 0 ? "Unmute (m)" : "Mute (m)"}
                                                         >
-                                                            {volume === 0 ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+                                                            {volume === 0 ? <VolumeX className="w-4 h-4 sm:w-5 sm:h-5" /> : <Volume2 className="w-4 h-4 sm:w-5 sm:h-5" />}
                                                         </button>
                                                         <input
                                                             type="range"
@@ -687,27 +749,27 @@ export default function WatchPage() {
                                                             step={0.05}
                                                             value={volume}
                                                             onChange={handleVolumeChange}
-                                                            className="w-0 overflow-hidden group-hover/volume:w-24 transition-all duration-300 h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer"
+                                                            className="w-0 overflow-hidden group-hover/volume:w-20 md:group-hover/volume:w-24 transition-all duration-300 h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer"
                                                             style={{
                                                                 background: `linear-gradient(to right, #fff ${volume * 100}%, rgba(255,255,255,0.2) ${volume * 100}%)`
                                                             }}
                                                         />
                                                     </div>
 
-                                                    <span className="text-xs md:text-sm font-medium text-white/90 font-mono">
+                                                    <span className="text-[10px] sm:text-xs md:text-sm font-medium text-white/90 font-mono whitespace-nowrap">
                                                         {formatTime(currentTime)} / {formatTime(duration)}
                                                     </span>
                                                 </div>
 
-                                                <div className="flex items-center gap-4">
+                                                <div className="flex items-center gap-1 sm:gap-2 md:gap-4">
                                                     {/* Speed Selector */}
-                                                    <div className="relative">
+                                                    <div className="relative hidden sm:block">
                                                         <button
                                                             onClick={() => setShowSpeedMenu(!showSpeedMenu)}
-                                                            className="text-white hover:text-indigo-400 transition-colors flex items-center gap-1"
+                                                            className="text-white hover:text-indigo-400 transition-colors flex items-center gap-1 p-1"
                                                         >
-                                                            <Gauge className="w-5 h-5" />
-                                                            <span className="text-xs font-bold w-8">{playbackRate}x</span>
+                                                            <Gauge className="w-4 h-4 sm:w-5 sm:h-5" />
+                                                            <span className="text-xs font-bold w-6 sm:w-8">{playbackRate}x</span>
                                                         </button>
 
                                                         <AnimatePresence>
@@ -734,18 +796,26 @@ export default function WatchPage() {
 
                                                     <button
                                                         onClick={toggleCaptions}
-                                                        className={`transition-colors ${showCaptions ? 'text-indigo-400' : 'text-white hover:text-indigo-400'}`}
+                                                        className={`transition-colors p-1 hidden sm:block ${showCaptions ? 'text-indigo-400' : 'text-white hover:text-indigo-400'}`}
                                                         title="Captions (CC)"
                                                     >
-                                                        <Captions className="w-5 h-5" />
+                                                        <Captions className="w-4 h-4 sm:w-5 sm:h-5" />
                                                     </button>
 
-                                                    <button onClick={togglePiP} className="text-white hover:text-indigo-400 transition-colors" title="Picture in Picture">
-                                                        <PictureInPicture className="w-5 h-5" />
+                                                    <button onClick={togglePiP} className="text-white hover:text-indigo-400 transition-colors p-1 hidden md:block" title="Picture in Picture">
+                                                        <PictureInPicture className="w-4 h-4 sm:w-5 sm:h-5" />
                                                     </button>
 
-                                                    <button onClick={toggleFullscreen} className="text-white hover:text-indigo-400 transition-colors">
-                                                        {isFullscreen ? <Minimize className="w-6 h-6" /> : <Maximize className="w-6 h-6" />}
+                                                    <button
+                                                        onClick={toggleFullscreen}
+                                                        onTouchEnd={(e) => {
+                                                            e.preventDefault();
+                                                            e.stopPropagation();
+                                                            toggleFullscreen();
+                                                        }}
+                                                        className="text-white hover:text-indigo-400 transition-colors p-1"
+                                                    >
+                                                        {isFullscreen ? <Minimize className="w-5 h-5 sm:w-6 sm:h-6" /> : <Maximize className="w-5 h-5 sm:w-6 sm:h-6" />}
                                                     </button>
 
                                                     <button
@@ -762,19 +832,19 @@ export default function WatchPage() {
 
                                                     <button
                                                         onClick={() => setShowDrawer(true)}
-                                                        className="text-white hover:text-indigo-400 transition-colors"
+                                                        className="text-white hover:text-indigo-400 transition-colors p-1 lg:hidden"
                                                         title="Lesson List"
                                                     >
-                                                        <PanelRightOpen className="w-6 h-6" />
+                                                        <PanelRightOpen className="w-5 h-5 sm:w-6 sm:h-6" />
                                                     </button>
 
                                                     {/* Settings Menu */}
-                                                    <div className="relative">
+                                                    <div className="relative hidden md:block">
                                                         <button
                                                             onClick={() => setShowSettings(!showSettings)}
-                                                            className={`transition-colors ${showSettings ? 'text-indigo-400' : 'text-white hover:text-indigo-400'}`}
+                                                            className={`transition-colors p-1 ${showSettings ? 'text-indigo-400' : 'text-white hover:text-indigo-400'}`}
                                                         >
-                                                            <Settings className="w-5 h-5" />
+                                                            <Settings className="w-4 h-4 sm:w-5 sm:h-5" />
                                                         </button>
 
                                                         <AnimatePresence>
@@ -880,11 +950,11 @@ export default function WatchPage() {
                                 transition={{ delay: 0.2 }}
                                 className={`mt-6 ${isTheaterMode ? 'max-w-7xl mx-auto px-4' : ''}`}
                             >
-                                <h1 className="text-2xl font-bold text-white mb-2 tracking-tight">{lesson.title}</h1>
+                                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2 tracking-tight">{lesson.title}</h1>
 
-                                <div className="bg-surface rounded-xl border border-theme p-6 mt-6">
-                                    <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">Description</h3>
-                                    <p className="text-muted leading-relaxed">
+                                <div className="bg-surface rounded-lg sm:rounded-xl border border-theme p-4 sm:p-6 mt-4 sm:mt-6">
+                                    <h3 className="text-xs sm:text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">Description</h3>
+                                    <p className="text-muted leading-relaxed text-sm sm:text-base">
                                         Watch this video to learn about {lesson.title}. Take notes and practice the concepts demonstrated.
                                     </p>
                                 </div>
@@ -900,8 +970,8 @@ export default function WatchPage() {
                             transition={{ delay: 0.3 }}
                             className={`space-y-6 ${isTheaterMode ? 'lg:col-span-3 max-w-7xl mx-auto px-4 w-full mt-8' : ''}`}
                         >
-                            <div className="bg-surface rounded-xl border border-theme p-6 shadow-lg">
-                                <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Your Progress</h3>
+                            <div className="bg-surface rounded-lg sm:rounded-xl border border-theme p-4 sm:p-6 shadow-lg">
+                                <h3 className="text-xs sm:text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Your Progress</h3>
                                 <div className="flex items-center justify-between text-sm mb-2">
                                     <span className="text-muted">Completion</span>
                                     <span className="text-white font-bold">{progress?.completed ? '100%' : 'In Progress'}</span>
@@ -921,7 +991,7 @@ export default function WatchPage() {
                                             await api.markLessonComplete(lessonId);
                                             setProgress(prev => prev ? { ...prev, completed: true } : { watchedSeconds: 0, completed: true });
                                         }}
-                                        className="w-full flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-white py-3 px-4 rounded-lg font-medium transition-colors border border-theme"
+                                        className="w-full flex items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-white py-2.5 sm:py-3 px-4 rounded-lg font-medium transition-colors border border-theme text-sm sm:text-base"
                                     >
                                         <CheckCircle className="w-4 h-4" />
                                         Mark as Complete
@@ -929,23 +999,23 @@ export default function WatchPage() {
                                 )}
                             </div>
 
-                            <div className="bg-surface rounded-xl border border-theme p-4">
-                                <button onClick={() => router.back()} className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-800/50 text-slate-300 hover:text-white transition-colors">
-                                    <span className="font-medium">Return to Course Curriculum</span>
-                                    <List className="w-5 h-5" />
+                            <div className="bg-surface rounded-lg sm:rounded-xl border border-theme p-3 sm:p-4">
+                                <button onClick={() => router.back()} className="w-full flex items-center justify-between p-2.5 sm:p-3 rounded-lg hover:bg-slate-800/50 text-slate-300 hover:text-white transition-colors">
+                                    <span className="font-medium text-sm sm:text-base">Return to Course Curriculum</span>
+                                    <List className="w-4 h-4 sm:w-5 sm:h-5" />
                                 </button>
                             </div>
 
                             {/* Lesson Group List */}
                             {groupLessons.length > 0 && (
-                                <div className="bg-surface rounded-xl border border-theme p-4 overflow-hidden">
-                                    <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 px-2">In this Chapter</h3>
-                                    <div className="space-y-1 max-h-[400px] overflow-y-auto custom-scrollbar">
+                                <div className="bg-surface rounded-lg sm:rounded-xl border border-theme p-3 sm:p-4 overflow-hidden">
+                                    <h3 className="text-xs sm:text-sm font-bold text-slate-400 uppercase tracking-wider mb-3 sm:mb-4 px-2">In this Chapter</h3>
+                                    <div className="space-y-1 max-h-[300px] sm:max-h-[400px] overflow-y-auto custom-scrollbar">
                                         {groupLessons.map((l) => (
                                             <Link
                                                 key={l.id}
                                                 href={`/watch/${l.id}`}
-                                                className={`flex items-center gap-3 p-3 rounded-lg transition-colors ${lesson?.id === l.id ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/30' : 'hover:bg-white/5 text-slate-300 hover:text-white'}`}
+                                                className={`flex items-center gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-lg transition-colors text-sm sm:text-base ${lesson?.id === l.id ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/30' : 'hover:bg-white/5 text-slate-300 hover:text-white'}`}
                                             >
                                                 {lesson?.id === l.id ? (
                                                     <PlayCircle className="w-4 h-4 flex-shrink-0 fill-current" />
@@ -1027,6 +1097,6 @@ export default function WatchPage() {
                     </>
                 )}
             </AnimatePresence>
-        </div>
+        </div >
     );
 }

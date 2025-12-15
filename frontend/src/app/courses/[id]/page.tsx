@@ -316,7 +316,7 @@ export default function CourseDetailPage() {
     }
 
     return (
-        <div className="min-h-screen pt-32 pb-24 px-4 bg-background">
+        <div className="min-h-screen pt-20 sm:pt-24 md:pt-32 pb-16 sm:pb-24 px-4 bg-background">
             <div className="max-w-6xl mx-auto">
                 {/* Header Card */}
 
@@ -324,49 +324,49 @@ export default function CourseDetailPage() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
-                    className="bg-slate-900/60 backdrop-blur-xl rounded-2xl p-8 md:p-12 mb-12 border border-white/10 shadow-2xl relative overflow-hidden"
+                    className="bg-slate-900/60 backdrop-blur-xl rounded-2xl p-6 sm:p-8 md:p-12 mb-8 sm:mb-12 border border-white/10 shadow-2xl relative overflow-hidden"
                 >
                     <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-pink-500/10 pointer-events-none" />
                     <div className="relative z-10">
-                        <div className="flex flex-wrap items-center gap-2 mb-6">
-                            <span className="inline-block px-4 py-1.5 bg-slate-800 border border-slate-700 text-slate-300 rounded-full text-sm font-bold tracking-wide uppercase">
+                        <div className="flex flex-wrap items-center gap-2 mb-4 sm:mb-6">
+                            <span className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 bg-slate-800 border border-slate-700 text-slate-300 rounded-full text-xs sm:text-sm font-bold tracking-wide uppercase">
                                 {course.category}
                             </span>
                             {course.tags?.map(tag => (
-                                <span key={tag} className="inline-block px-3 py-1.5 bg-purple-500/10 border border-purple-500/20 text-purple-300 rounded-full text-xs font-medium">
+                                <span key={tag} className="inline-block px-2 sm:px-3 py-1 sm:py-1.5 bg-purple-500/10 border border-purple-500/20 text-purple-300 rounded-full text-xs font-medium">
                                     #{tag}
                                 </span>
                             ))}
                         </div>
 
-                        <div className="flex items-start justify-between gap-4 mb-6">
-                            <h1 className="text-4xl md:text-6xl font-bold text-white tracking-tight flex-1">
+                        <div className="flex items-start justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
+                            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-white tracking-tight flex-1">
                                 {course.title}
                             </h1>
                             {isAdmin && (
                                 <button
                                     onClick={() => setEditModal({ isOpen: true, type: 'course', id: course.id, initialData: { title: course.title, description: course.description, category: course.category, tags: course.tags } })}
-                                    className="p-2 bg-slate-800 rounded-lg hover:bg-slate-700 text-slate-400 hover:text-white transition-colors"
+                                    className="p-2 bg-slate-800 rounded-lg hover:bg-slate-700 text-slate-400 hover:text-white transition-colors flex-shrink-0"
                                 >
-                                    <Edit2 className="w-5 h-5" />
+                                    <Edit2 className="w-4 h-4 sm:w-5 sm:h-5" />
                                 </button>
                             )}
                         </div>
 
-                        <p className="text-xl text-muted mb-8 max-w-3xl leading-relaxed">{course.description}</p>
+                        <p className="text-sm sm:text-base md:text-lg lg:text-xl text-muted mb-6 sm:mb-8 max-w-3xl leading-relaxed">{course.description}</p>
 
-                        <div className="flex flex-wrap items-center gap-8 text-slate-400 mb-8">
-                            <span className="flex items-center gap-2 bg-slate-900 px-4 py-2 rounded-lg border border-theme">
-                                <BookOpen className="w-5 h-5 text-indigo-400" />
-                                <span className="font-medium text-white">{course.modules.length}</span> Modules
+                        <div className="flex flex-wrap items-center gap-3 sm:gap-4 md:gap-8 text-slate-400 mb-6 sm:mb-8">
+                            <span className="flex items-center gap-2 bg-slate-900 px-3 sm:px-4 py-2 rounded-lg border border-theme text-sm">
+                                <BookOpen className="w-4 h-4 sm:w-5 sm:h-5 text-indigo-400" />
+                                <span className="font-medium text-white">{course.modules.length}</span> <span className="hidden sm:inline">Modules</span><span className="sm:hidden">Mod</span>
                             </span>
-                            <span className="flex items-center gap-2 bg-slate-900 px-4 py-2 rounded-lg border border-theme">
-                                <PlayCircle className="w-5 h-5 text-pink-400" />
-                                <span className="font-medium text-white">{getTotalLessons()}</span> Lessons
+                            <span className="flex items-center gap-2 bg-slate-900 px-3 sm:px-4 py-2 rounded-lg border border-theme text-sm">
+                                <PlayCircle className="w-4 h-4 sm:w-5 sm:h-5 text-pink-400" />
+                                <span className="font-medium text-white">{getTotalLessons()}</span> <span className="hidden sm:inline">Lessons</span><span className="sm:hidden">Les</span>
                             </span>
                             {course.duration && (
-                                <span className="flex items-center gap-2 bg-slate-900 px-4 py-2 rounded-lg border border-theme">
-                                    <span className="text-emerald-400 font-mono text-sm">⏱</span>
+                                <span className="flex items-center gap-2 bg-slate-900 px-3 sm:px-4 py-2 rounded-lg border border-theme text-sm">
+                                    <span className="text-emerald-400 font-mono text-xs sm:text-sm">⏱</span>
                                     <span className="font-medium text-white">{course.duration}</span>
                                 </span>
                             )}
@@ -378,14 +378,14 @@ export default function CourseDetailPage() {
                                 whileTap={{ scale: 0.95 }}
                                 onClick={handleEnroll}
                                 disabled={enrolling}
-                                className="group relative px-8 py-4 bg-indigo-600 text-white rounded-lg font-bold text-lg hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/20 disabled:opacity-50"
+                                className="group relative w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-indigo-600 text-white rounded-lg font-bold text-base sm:text-lg hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/20 disabled:opacity-50"
                             >
                                 {enrolling ? 'Enrolling...' : 'Enroll Now - Free'}
-                                <ArrowRight className="ml-2 w-5 h-5 inline-block transition-transform group-hover:translate-x-1" />
+                                <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5 inline-block transition-transform group-hover:translate-x-1" />
                             </motion.button>
                         ) : (
-                            <span className="inline-flex items-center gap-2 px-6 py-3 bg-green-500/10 border border-green-500/20 text-green-400 rounded-lg font-bold text-lg">
-                                <CheckCircle className="w-6 h-6" />
+                            <span className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-3 bg-green-500/10 border border-green-500/20 text-green-400 rounded-lg font-bold text-base sm:text-lg">
+                                <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6" />
                                 Enrolled
                             </span>
                         )}
@@ -393,12 +393,12 @@ export default function CourseDetailPage() {
                 </motion.div>
 
                 {/* Course Content */}
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                     <motion.h2
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.2 }}
-                        className="text-2xl font-bold mb-8 text-white tracking-tight"
+                        className="text-xl sm:text-2xl font-bold mb-6 sm:mb-8 text-white tracking-tight"
                     >
                         Course Content
                     </motion.h2>
@@ -411,21 +411,21 @@ export default function CourseDetailPage() {
                     >
                         {course.modules.map((module, moduleIndex) => (
                             <motion.div key={module.id} variants={item} className="bg-slate-900/40 backdrop-blur-md rounded-xl overflow-hidden border border-white/5 hover:border-indigo-500/30 transition-colors">
-                                <div className="w-full flex items-center justify-between p-6 hover:bg-white/5 transition-colors cursor-pointer" onClick={() => toggleModule(module.id)}>
-                                    <div className="flex items-center gap-6 flex-1">
-                                        <div className="w-10 h-10 bg-slate-800 rounded-lg flex items-center justify-center border border-slate-700 font-mono text-indigo-400 font-bold">
+                                <div className="w-full flex items-center justify-between p-4 sm:p-6 hover:bg-white/5 transition-colors cursor-pointer" onClick={() => toggleModule(module.id)}>
+                                    <div className="flex items-center gap-3 sm:gap-6 flex-1 min-w-0">
+                                        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-slate-800 rounded-lg flex items-center justify-center border border-slate-700 font-mono text-indigo-400 font-bold text-sm sm:text-base flex-shrink-0">
                                             {moduleIndex + 1}
                                         </div>
-                                        <div>
-                                            <h3 className="text-xl font-bold group-hover:text-indigo-400 transition-colors flex items-center gap-3">
-                                                {module.title}
-                                                <div className="flex items-center gap-2">
-                                                    <span className="text-sm font-normal text-slate-500 bg-slate-800 px-2 py-0.5 rounded-md">
+                                        <div className="flex-1 min-w-0">
+                                            <h3 className="text-base sm:text-lg md:text-xl font-bold group-hover:text-indigo-400 transition-colors flex flex-col sm:flex-row sm:items-center gap-2">
+                                                <span className="truncate">{module.title}</span>
+                                                <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                                                    <span className="text-xs sm:text-sm font-normal text-slate-500 bg-slate-800 px-1.5 sm:px-2 py-0.5 rounded-md whitespace-nowrap">
                                                         {module.lessonGroups.reduce((acc, g) => acc + g.lessons.filter(l => progressMap.get(l.id)?.completed).length, 0)}/
-                                                        {module.lessonGroups.reduce((acc, g) => acc + g.lessons.length, 0)} Completed
+                                                        {module.lessonGroups.reduce((acc, g) => acc + g.lessons.length, 0)} <span className="hidden sm:inline">Completed</span>
                                                     </span>
                                                     {module.duration && (
-                                                        <span className="text-sm font-mono text-slate-500 bg-slate-800 px-2 py-0.5 rounded-md">
+                                                        <span className="text-xs sm:text-sm font-mono text-slate-500 bg-slate-800 px-1.5 sm:px-2 py-0.5 rounded-md">
                                                             {module.duration}
                                                         </span>
                                                     )}
@@ -433,11 +433,11 @@ export default function CourseDetailPage() {
                                                         const p = progressMap.get(l.id);
                                                         return !p?.completed && (p?.watchedSeconds || 0) > 0;
                                                     }).length, 0) > 0 && (
-                                                            <span className="text-sm font-normal text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2 py-0.5 rounded-md">
+                                                            <span className="text-xs sm:text-sm font-normal text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-1.5 sm:px-2 py-0.5 rounded-md whitespace-nowrap">
                                                                 {module.lessonGroups.reduce((acc, g) => acc + g.lessons.filter(l => {
                                                                     const p = progressMap.get(l.id);
                                                                     return !p?.completed && (p?.watchedSeconds || 0) > 0;
-                                                                }).length, 0)} In Progress
+                                                                }).length, 0)} <span className="hidden sm:inline">In Progress</span>
                                                             </span>
                                                         )}
                                                 </div>
@@ -445,24 +445,24 @@ export default function CourseDetailPage() {
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center gap-4">
+                                    <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
                                         {isAdmin && (
                                             <button
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     setEditModal({ isOpen: true, type: 'module', id: module.id, initialData: { title: module.title } });
                                                 }}
-                                                className="p-2 text-slate-500 hover:text-white transition-colors"
+                                                className="p-1.5 sm:p-2 text-slate-500 hover:text-white transition-colors"
                                             >
-                                                <Edit2 className="w-4 h-4" />
+                                                <Edit2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                                             </button>
                                         )}
                                         <motion.div
                                             animate={{ rotate: expandedModules.has(module.id) ? 180 : 0 }}
                                             transition={{ duration: 0.3 }}
-                                            className={`w-8 h-8 rounded-lg flex items-center justify-center ${expandedModules.has(module.id) ? 'text-white' : 'text-slate-500'}`}
+                                            className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center ${expandedModules.has(module.id) ? 'text-white' : 'text-slate-500'}`}
                                         >
-                                            <ChevronDown className="w-5 h-5" />
+                                            <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5" />
                                         </motion.div>
                                     </div>
                                 </div>

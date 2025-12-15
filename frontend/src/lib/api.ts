@@ -164,6 +164,27 @@ class ApiClient {
         });
     }
 
+    // Admin - Delete Operations
+    async deleteCourse(id: string) {
+        return this.request<{ message: string }>(`/api/admin/courses/${id}`, {
+            method: 'DELETE',
+        });
+    }
+
+    async deleteUser(id: string) {
+        return this.request<{ message: string }>(`/api/admin/users/${id}`, {
+            method: 'DELETE',
+        });
+    }
+
+    // Admin - User Management
+    async updateUserRoles(id: string, roles: string[]) {
+        return this.request<{ id: string; email: string; name: string; roles: string[] }>(`/api/admin/users/${id}/roles`, {
+            method: 'PUT',
+            body: JSON.stringify({ roles }),
+        });
+    }
+
     // Video streaming URL
     getStreamUrl(fileId: string) {
         return `${API_BASE}/api/drive/stream/${fileId}`;

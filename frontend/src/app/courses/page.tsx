@@ -40,24 +40,24 @@ export default function CoursesPage() {
     }, []);
 
     return (
-        <div className="min-h-screen pt-24 pb-12 px-4 bg-background">
+        <div className="min-h-screen pt-20 sm:pt-24 pb-12 px-4 bg-background">
             <div className="max-w-7xl mx-auto">
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5 }}
-                    className="text-center mb-16"
+                    className="text-center mb-12 sm:mb-16"
                 >
-                    <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white tracking-tight">
+                    <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 text-white tracking-tight">
                         Explore Library
                     </h1>
-                    <p className="text-lg text-muted max-w-2xl mx-auto">
+                    <p className="text-base sm:text-lg text-muted max-w-2xl mx-auto px-4">
                         Discover our comprehensive collection of programming courses designed to take you from beginner to expert.
                     </p>
                 </motion.div>
 
                 {loading ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                         {[1, 2, 3, 4, 5, 6].map((i) => (
                             <div key={i} className="bg-surface rounded-3xl p-6 h-96 animate-pulse border border-theme">
                                 <div className="h-48 bg-slate-800 rounded-2xl mb-6" />
@@ -71,7 +71,7 @@ export default function CoursesPage() {
                         variants={container}
                         initial="hidden"
                         animate="show"
-                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8"
                     >
                         {courses.map((course) => (
                             <motion.div key={course.id} variants={item}>
@@ -79,21 +79,21 @@ export default function CoursesPage() {
                                     href={`/courses/${course.id}`}
                                     className="group relative bg-surface border border-theme rounded-2xl overflow-hidden flex flex-col h-full hover:border-indigo-500/50 transition-colors shadow-lg"
                                 >
-                                    <div className="h-56 relative bg-slate-900 flex items-center justify-center overflow-hidden border-b border-theme">
-                                        <div className="w-24 h-24 bg-indigo-600 rounded-2xl rotate-12 group-hover:rotate-6 transition-transform shadow-2xl flex items-center justify-center">
-                                            <span className="text-4xl font-bold text-white">{course.title.charAt(0)}</span>
+                                    <div className="h-48 sm:h-56 relative bg-slate-900 flex items-center justify-center overflow-hidden border-b border-theme">
+                                        <div className="w-20 h-20 sm:w-24 sm:h-24 bg-indigo-600 rounded-2xl rotate-12 group-hover:rotate-6 transition-transform shadow-2xl flex items-center justify-center">
+                                            <span className="text-3xl sm:text-4xl font-bold text-white">{course.title.charAt(0)}</span>
                                         </div>
                                     </div>
-                                    <div className="p-8 flex-1 flex flex-col">
-                                        <div className="mb-4">
+                                    <div className="p-6 sm:p-8 flex-1 flex flex-col">
+                                        <div className="mb-3 sm:mb-4">
                                             <span className="inline-block px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-300 text-xs font-bold uppercase tracking-wider">
                                                 {course.category}
                                             </span>
                                         </div>
-                                        <h3 className="text-2xl font-bold mb-3 text-white group-hover:text-indigo-400 transition-colors tracking-tight">
+                                        <h3 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-3 text-white group-hover:text-indigo-400 transition-colors tracking-tight">
                                             {course.title}
                                         </h3>
-                                        <p className="text-muted mb-6 line-clamp-2">
+                                        <p className="text-muted mb-4 sm:mb-6 line-clamp-2 text-sm sm:text-base">
                                             {course.description}
                                         </p>
                                         <div className="mt-auto flex items-center text-sm font-medium text-white group-hover:translate-x-2 transition-transform">

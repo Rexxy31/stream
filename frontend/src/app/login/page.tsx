@@ -4,6 +4,11 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import { Mail, Lock } from 'lucide-react';
+import { motion } from 'framer-motion';
+import Input from '@/components/ui/Input';
+import Button from '@/components/ui/Button';
+import Card from '@/components/ui/Card';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -29,62 +34,102 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-[calc(100vh-64px)] flex items-center justify-center p-4">
-            <div className="w-full max-w-md">
-                <div className="bg-surface rounded-2xl p-8 border border-theme shadow-xl">
-                    <h1 className="text-3xl font-bold text-center mb-2 tracking-tight">Welcome back</h1>
-                    <p className="text-muted text-center mb-8">Sign in to continue learning</p>
+        <div className="min-h-[calc(100vh-64px)] flex items-center justify-center p-4 relative overflow-hidden">
+            {/* Background Gradient Blobs */}
+            <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob"></div>
+                <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-2000"></div>
+            </div>
 
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="w-full max-w-md relative z-10"
+            >
+                <Card variant="glass" padding="lg" hover={false}>
+                    {/* Header */}
+                    <div className="text-center mb-8">
+                        <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+                            className="w-16 h-16 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg"
+                        >
+                            <Lock className="w-8 h-8 text-white" />
+                        </motion.div>
+                        <h1 className="text-3xl font-bold text-white mb-2">Welcome back</h1>
+                        <p className="text-slate-400">Sign in to continue your learning journey</p>
+                    </div>
+
+                    {/* Error Message */}
                     {error && (
-                        <div className="bg-red-900/20 border border-red-500/20 text-red-400 px-4 py-3 rounded-lg mb-6 text-sm">
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-lg mb-6 text-sm"
+                        >
                             {error}
-                        </div>
+                        </motion.div>
                     )}
 
+                    {/* Form */}
                     <form onSubmit={handleSubmit} className="space-y-5">
-                        <div className="space-y-2">
-                            <label className="block text-sm font-medium text-slate-300">Email</label>
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                                className="w-full bg-background border border-theme rounded-lg px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
-                                placeholder="you@example.com"
-                            />
-                        </div>
+                        <Input
+                            type="email"
+                            label="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            leftIcon={<Mail className="w-5 h-5" />}
+                            required
+                            autoComplete="email"
+                        />
 
-                        <div className="space-y-2">
-                            <div className="flex items-center justify-between">
-                                <label className="block text-sm font-medium text-slate-300">Password</label>
-                            </div>
-                            <input
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                                className="w-full bg-background border border-theme rounded-lg px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
-                                placeholder="••••••••"
-                            />
-                        </div>
+                        <Input
+                            type="password"
+                            label="Password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            leftIcon={<Lock className="w-5 h-5" />}
+                            required
+                            autoComplete="current-password"
+                        />
 
-                        <button
+                        <Button
                             type="submit"
-                            disabled={loading}
-                            className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+                            variant="primary"
+                            size="lg"
+                            loading={loading}
+                            className="w-full"
                         >
-                            {loading ? 'Signing in...' : 'Sign in'}
-                        </button>
+                            Sign in
+                        </Button>
                     </form>
 
-                    <p className="text-center text-muted mt-8 text-sm">
-                        Don&apos;t have an account?{' '}
-                        <Link href="/register" className="text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
-                            Sign up
-                        </Link>
-                    </p>
-                </div>
-            </div>
+                    {/* Footer */}
+                    <div className="mt-8 text-center">
+                        <p className="text-slate-400 text-sm">
+                            Don&apos;t have an account?{' '}
+                            <Link
+                                href="/register"
+                                className="text-indigo-400 hover:text-indigo-300 font-medium transition-colors hover:underline"
+                            >
+                                Sign up
+                            </Link>
+                        </p>
+                    </div>
+                </Card>
+
+                {/* Additional Info */}
+                <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.6 }}
+                    className="text-center text-slate-500 text-sm mt-6"
+                >
+                    By signing in, you agree to our Terms of Service and Privacy Policy
+                </motion.p>
+            </motion.div>
         </div>
     );
 }
